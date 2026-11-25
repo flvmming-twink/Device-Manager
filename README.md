@@ -1,43 +1,50 @@
-﻿# Contact Manager
+# Device Manager
 
-Native Android app (Kotlin, Android 5.0+).
+Основа мобильного приложения для проекта МИСИС, перенесённая из [Contact Manager](https://github.com/flvmming-twink/Contact-meneger-archive-copy).
 
-## Current version
-`Contact Manager v0.12.2a (TEST)`
+На этом этапе созданы репозиторий и копия исходного продукта. Адаптация функций, интерфейса, имени приложения и Android package будет выполняться по следующим заданиям.
 
-## Release state
-- `v0.12.1` published as release
-- `v0.12.2` published as pre-release
-- `v0.12.2a` is current stabilization test build
+## Рабочая основа
 
-## v0.12.2a focus
-- startup crash investigation and stabilization,
-- safer UI inflation path for header icon and contact cards,
-- persistent event/crash logging to text files on device.
+- Репозиторий: [flvmming-twink/Device-Manager](https://github.com/flvmming-twink/Device-Manager), приватный.
+- Исходная ветка: `main`, коммит `9190c49e30cf9234e7e8031636cdb0723539f8e5`.
+- Код приложения: Contact Manager `v1.01.1`, `versionCode 36`; Kotlin, Android, Gradle.
+- `v1.01.1` — предварительный релиз; последний стабильный релиз — `v1.0.0`.
+- Главная ветка исходника отличается от тега `v1.01.1` добавленным каталогом SVG. Код приложения совпадает.
+- Рабочий проект находится непосредственно в корне: `app/`, `gradle/`, конфигурация Gradle и wrapper.
 
-## On-device logs
-Each launch creates a log file in:
-`Android/data/com.example.contactmanagerdemo/files/Documents/ContactManagerLogs/`
+## Сохранённые материалы
 
-## APK
-- `artifacts/ContactManager-v0.12.2a-debug.apk`
-- `versions/Contact Manager v0.12.2a/ContactManager-v0.12.2a-debug.apk`
+Перенесены все 55 исходных коммитов, 35 тегов и все файлы исходной ветки: приложение, тесты, ресурсы, документация, описания версий, APK, SVG и сценарии GitHub Actions. Все исходные теги остаются тегами Contact Manager.
 
-## Versions
-- `versions/DEMO-v0` - released DEMO version (with APK)
-- `versions/Contact Manager v0.11` - archived (no APK)
-- `versions/Contact Manager v0.11.2` - stabilization release
-- `versions/Contact Manager v0.11.3` - description only
-- `versions/Contact Manager v0.11.5a` - description only
-- `versions/Contact Manager v0.11.5b` - minimal rewrite
-- `versions/Contact Manager v0.11.5c` - encoding fix
-- `versions/Contact Manager v0.11.6a` - Russian UI, stats, search
-- `versions/Contact Manager v0.11.6b` - stable redesign + extended form
-- `versions/Contact Manager v0.12.1` - release
-- `versions/Contact Manager v0.12.2` - pre-release
-- `versions/Contact Manager v0.12.2a` - test stabilization build
+Пять последних версий определены по времени публикации GitHub Releases, включая предварительные релизы. Для каждой сохранены отдельный ZIP исходников, описание GitHub-релиза и проверенный APK.
 
-## Descriptions
-- `docs`
-- `descriptions/ФРОНТЭНД`
-- `descriptions/БЭКЭНД`
+| Версия | Статус в исходнике | Исходники | APK и локальное описание |
+| --- | --- | --- | --- |
+| v1.01.1 (36) | Предварительный релиз | [source.zip](archive/contact-manager/v1.01.1/source.zip) | [Каталог версии](versions/Contact%20Manager%20v1.01.1/) |
+| v1.0.0 (35) | Стабильный релиз | [source.zip](archive/contact-manager/v1.0.0/source.zip) | [Каталог версии](versions/Contact%20Manager%20v1.0.0/) |
+| v0.19.4 (34) | Предварительный релиз | [source.zip](archive/contact-manager/v0.19.4/source.zip) | [Каталог версии](versions/Contact%20Manager%20v0.19.4/) |
+| v0.19.3 (33) | Релиз | [source.zip](archive/contact-manager/v0.19.3/source.zip) | [Каталог версии](versions/Contact%20Manager%20v0.19.3/) |
+| v0.19.2 (32) | Релиз | [source.zip](archive/contact-manager/v0.19.2/source.zip) | [Каталог версии](versions/Contact%20Manager%20v0.19.2/) |
+
+Каждый ZIP создан из точного Git-тега и включает все файлы, кроме каталогов исторических сборок `versions/` и `artifacts/`. Оба каталога полностью сохранены в основной копии и Git-истории. ZIP содержит исходники приложения, ресурсы, настройки сборки и документацию соответствующей версии без повторения архива старых APK.
+
+- [manifest.json](archive/contact-manager/manifest.json) — точные коммиты, ссылки, пути и SHA-256 пяти версий. Размеры и SHA-256 всех пяти APK совпали с данными GitHub Releases.
+- [releases.json](archive/contact-manager/releases.json) — метаданные и описания всех 35 GitHub-релизов на момент переноса.
+- [README.original.md](archive/contact-manager/README.original.md) — исходный README без изменений. Указанная в нём версия `v0.12.2a` устарела.
+- `docs/`, `descriptions/`, `versions/`, `artifacts/`, `svgs-full/` — все соответствующие материалы исходника.
+- `.local-backups/Contact-meneger-archive-copy.bundle` — локальная автономная копия исходной Git-истории, исключённая из коммитов. История также перенесена в новый репозиторий.
+
+Для повторного создания пяти ZIP и проверки APK в PowerShell:
+
+```powershell
+& .\archive\contact-manager\prepare-archive.ps1
+```
+
+## Git и публикация
+
+В подготовленной локальной копии `origin` указывает на Device Manager, `upstream` — на исходный Contact Manager. Отправка в `upstream` локально отключена; отправка по умолчанию настроена на `origin`.
+
+GitHub Actions в новом репозитории отключены, чтобы исходные сценарии не запускали публикацию релизов Contact Manager при переносе. Файлы сценариев сохранены. Настройку CI и выпусков Device Manager следует выполнить при адаптации продукта.
+
+Само приложение при переносе не изменялось и не пересобиралось. Исходные APK сохранены как материалы Contact Manager. Перенос подготовлен 25 ноября 2026 года.

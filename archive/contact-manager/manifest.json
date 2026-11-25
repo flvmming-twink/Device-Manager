@@ -1,0 +1,117 @@
+{
+  "source_repository": "https://github.com/flvmming-twink/Contact-meneger-archive-copy",
+  "imported_source_head": "9190c49e30cf9234e7e8031636cdb0723539f8e5",
+  "selection": "Five most recently published non-draft GitHub releases, including prereleases",
+  "releases": [
+    {
+      "tag": "v1.01.1",
+      "commit": "0f08a09868a718408e3933743629b9a37de0614e",
+      "release_url": "https://github.com/flvmming-twink/Contact-meneger-archive-copy/releases/tag/v1.01.1",
+      "published_at": "2026-10-01T11:04:49Z",
+      "prerelease": true,
+      "source_archive": "archive/contact-manager/v1.01.1/source.zip",
+      "source_archive_sha256": "a4a5b1989ef4979ad4374403d94e536a47be969265fa52d82e9aa5d27f6b4826",
+      "source_archive_excludes": [
+        "versions/",
+        "artifacts/"
+      ],
+      "assets": [
+        {
+          "path": "versions/Contact Manager v1.01.1/ContactManager-v1.01.1-debug.apk",
+          "bytes": 7536560,
+          "sha256": "9ada823be7dfd7e6ebde92436572eba82a15e24b3e1457115b4528f425c4ce4f",
+          "source_url": "https://github.com/flvmming-twink/Contact-meneger-archive-copy/releases/download/v1.01.1/ContactManager-v1.01.1-debug.apk",
+          "github_digest_verified": true
+        }
+      ]
+    },
+    {
+      "tag": "v1.0.0",
+      "commit": "379da4a55a41b5487f0cf548597451fbd7d8b2b0",
+      "release_url": "https://github.com/flvmming-twink/Contact-meneger-archive-copy/releases/tag/v1.0.0",
+      "published_at": "2026-10-01T11:04:44Z",
+      "prerelease": false,
+      "source_archive": "archive/contact-manager/v1.0.0/source.zip",
+      "source_archive_sha256": "dac54a7c324bdab3427ccaa5ae36caa818a2c843bdce18796d0b2b51af4422cd",
+      "source_archive_excludes": [
+        "versions/",
+        "artifacts/"
+      ],
+      "assets": [
+        {
+          "path": "versions/Contact Manager v1.0.0/ContactManager-v1.0.0-debug.apk",
+          "bytes": 7525401,
+          "sha256": "1c4b5edf553e18ce02aec386169bc023c6b91da3ec2dfae7eec77dd54cd03301",
+          "source_url": "https://github.com/flvmming-twink/Contact-meneger-archive-copy/releases/download/v1.0.0/ContactManager-v1.0.0-debug.apk",
+          "github_digest_verified": true
+        }
+      ]
+    },
+    {
+      "tag": "v0.19.4",
+      "commit": "cde9bdbab9d4bfc292e174ee900c543e421c669d",
+      "release_url": "https://github.com/flvmming-twink/Contact-meneger-archive-copy/releases/tag/v0.19.4",
+      "published_at": "2026-10-01T11:04:39Z",
+      "prerelease": true,
+      "source_archive": "archive/contact-manager/v0.19.4/source.zip",
+      "source_archive_sha256": "7467dd4cc7ebf2e37a24b8c715392ea61f4d6db661b4ee0950ddeddc1fe00a9c",
+      "source_archive_excludes": [
+        "versions/",
+        "artifacts/"
+      ],
+      "assets": [
+        {
+          "path": "versions/Contact Manager v0.19.4/ContactManager-v0.19.4-debug.apk",
+          "bytes": 7525408,
+          "sha256": "828b216eaa6535c4b5ed4a3f8b3ea310c003fc84ed4c682753856c4cba712820",
+          "source_url": "https://github.com/flvmming-twink/Contact-meneger-archive-copy/releases/download/v0.19.4/ContactManager-v0.19.4-debug.apk",
+          "github_digest_verified": true
+        }
+      ]
+    },
+    {
+      "tag": "v0.19.3",
+      "commit": "e2c4c67da7caae1d161cb91d40583813984edeef",
+      "release_url": "https://github.com/flvmming-twink/Contact-meneger-archive-copy/releases/tag/v0.19.3",
+      "published_at": "2026-10-01T11:04:30Z",
+      "prerelease": false,
+      "source_archive": "archive/contact-manager/v0.19.3/source.zip",
+      "source_archive_sha256": "bbcb44ab6d4f439c9db170c3a9b9dddc3fa3c6202d3bf6136a9ccdd96024b430",
+      "source_archive_excludes": [
+        "versions/",
+        "artifacts/"
+      ],
+      "assets": [
+        {
+          "path": "versions/Contact Manager v0.19.3/ContactManager-v0.19.3-debug.apk",
+          "bytes": 7508640,
+          "sha256": "f268ae1abd06eb5d4b1fc0a6aa37b2359662c7a61a3e0bb1e28da21a1c49c41c",
+          "source_url": "https://github.com/flvmming-twink/Contact-meneger-archive-copy/releases/download/v0.19.3/ContactManager-v0.19.3-debug.apk",
+          "github_digest_verified": true
+        }
+      ]
+    },
+    {
+      "tag": "v0.19.2",
+      "commit": "ab9362deeb459d245c173da64a4aee6d54c6e814",
+      "release_url": "https://github.com/flvmming-twink/Contact-meneger-archive-copy/releases/tag/v0.19.2",
+      "published_at": "2026-10-01T11:04:20Z",
+      "prerelease": false,
+      "source_archive": "archive/contact-manager/v0.19.2/source.zip",
+      "source_archive_sha256": "0e790f57a17cb4d04393153ad840a0c8b2ef9ffa1e6cd53c33e99ed68c41a277",
+      "source_archive_excludes": [
+        "versions/",
+        "artifacts/"
+      ],
+      "assets": [
+        {
+          "path": "versions/Contact Manager v0.19.2/ContactManager-v0.19.2-debug.apk",
+          "bytes": 7485728,
+          "sha256": "0a425cf9050197d5515506c5fa1df8dedf441c8392102ed67e2b8532759b4499",
+          "source_url": "https://github.com/flvmming-twink/Contact-meneger-archive-copy/releases/download/v0.19.2/ContactManager-v0.19.2-debug.apk",
+          "github_digest_verified": true
+        }
+      ]
+    }
+  ]
+}
