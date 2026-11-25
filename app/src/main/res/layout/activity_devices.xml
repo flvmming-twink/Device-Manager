@@ -1,0 +1,37 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/deviceRoot" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="16dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_top_header_gradient" android:padding="14dp" android:orientation="vertical">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
+                <TextView android:id="@+id/deviceTitle" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="@string/app_name" android:textColor="@android:color/white" android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"/>
+                <ImageButton android:id="@+id/deviceMenu" android:layout_width="48dp" android:layout_height="48dp" android:layout_marginStart="8dp" android:background="?attr/selectableItemBackgroundBorderless" android:src="@drawable/ic_more" android:contentDescription="@string/menu" android:padding="12dp"/>
+            </LinearLayout>
+            <TextView android:id="@+id/deviceStats" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textColor="@color/stats_text" android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"/>
+        </LinearLayout>
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="@string/search_hint" style="@style/DeviceInput" app:endIconMode="clear_text">
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/deviceSearch" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="text" android:singleLine="true" android:imeOptions="actionSearch" android:textSize="16sp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content" android:scrollbars="none">
+            <com.google.android.material.chip.ChipGroup android:id="@+id/statusFilters" android:layout_width="wrap_content" android:layout_height="wrap_content" app:singleSelection="true" app:selectionRequired="true" app:singleLine="true" app:chipSpacingHorizontal="8dp">
+                <com.google.android.material.chip.Chip android:id="@+id/statusAll" style="@style/Widget.MaterialComponents.Chip.Choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:checked="true" android:text="@string/status_all" app:ensureMinTouchTargetSize="true" android:textColor="@color/device_chip_text" app:chipBackgroundColor="@color/device_chip_background"/>
+                <com.google.android.material.chip.Chip android:id="@+id/statusActive" style="@style/Widget.MaterialComponents.Chip.Choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/filter_active" app:ensureMinTouchTargetSize="true" android:textColor="@color/device_chip_text" app:chipBackgroundColor="@color/device_chip_background"/>
+                <com.google.android.material.chip.Chip android:id="@+id/statusWriteOff" style="@style/Widget.MaterialComponents.Chip.Choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/status_write_off" app:ensureMinTouchTargetSize="true" android:textColor="@color/device_chip_text" app:chipBackgroundColor="@color/device_chip_background"/>
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
+            <com.google.android.material.button.MaterialButton android:id="@+id/locationFilters" style="@style/Widget.MaterialComponents.Button.TextButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:minHeight="48dp" android:text="@string/filter_location" android:textAllCaps="false" android:textColor="@color/text_primary"/>
+            <Spinner android:id="@+id/deviceSort" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="8dp" android:minHeight="48dp" android:background="@drawable/bg_sort_spinner" android:popupBackground="@color/surface" android:contentDescription="@string/sort_label" android:spinnerMode="dropdown"/>
+        </LinearLayout>
+        <TextView android:id="@+id/deviceResultCount" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/device_secondary" android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" android:layout_marginBottom="6dp" android:accessibilityLiveRegion="polite"/>
+        <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+            <androidx.recyclerview.widget.RecyclerView android:id="@+id/deviceList" android:layout_width="match_parent" android:layout_height="match_parent" android:paddingBottom="88dp" android:clipToPadding="false"/>
+            <LinearLayout android:id="@+id/deviceEmpty" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="16dp">
+                <TextView android:id="@+id/deviceEmptyTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" android:textColor="@color/text_primary" android:textStyle="bold"/>
+                <TextView android:id="@+id/deviceEmptyBody" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:gravity="center" android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" android:textColor="@color/device_secondary"/>
+                <com.google.android.material.button.MaterialButton android:id="@+id/deviceRetry" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/retry" android:visibility="gone"/>
+            </LinearLayout>
+            <ProgressBar android:id="@+id/deviceLoading" android:layout_width="48dp" android:layout_height="48dp" android:layout_gravity="center" android:visibility="gone"/>
+        </FrameLayout>
+    </LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton android:id="@+id/addDevice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="bottom|end" android:layout_margin="8dp" app:srcCompat="@drawable/ic_plus_white_24" app:tint="@color/device_on_accent" app:backgroundTint="@color/device_accent" android:contentDescription="@string/add_device"/>
+</FrameLayout>

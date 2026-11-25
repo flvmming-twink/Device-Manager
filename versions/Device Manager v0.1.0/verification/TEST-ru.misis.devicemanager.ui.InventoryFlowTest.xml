@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.misis.devicemanager.ui.InventoryFlowTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-25T15:40:15" hostname="DESKTOP-ILDCBJV" time="13.263">
+  <properties/>
+  <testcase name="createDeviceThroughEditorThenFindByRoomAndInventory" classname="ru.misis.devicemanager.ui.InventoryFlowTest" time="10.873"/>
+  <testcase name="unsavedDraftSurvivesActivityRecreation" classname="ru.misis.devicemanager.ui.InventoryFlowTest" time="1.568"/>
+  <testcase name="writeOffRequiresReasonAndPersistsAfterEditingLocation" classname="ru.misis.devicemanager.ui.InventoryFlowTest" time="0.822"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

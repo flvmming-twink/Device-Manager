@@ -1,0 +1,31 @@
+<resources>
+    <color name="device_accent">#F59E0B</color>
+    <color name="device_on_accent">#0F172A</color>
+    <color name="device_secondary">#475569</color>
+    <color name="device_active">#166534</color>
+    <color name="device_active_bg">#DCFCE7</color>
+    <color name="device_write_off">#9A3412</color>
+    <color name="device_write_off_bg">#FFEDD5</color>
+    <style name="Theme.DeviceManager" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/device_accent</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/device_on_accent</item>
+        <item name="colorSecondary">@color/device_accent</item>
+        <item name="colorOnSecondary">@color/device_on_accent</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:statusBarColor">#0F172A</item>
+        <item name="android:navigationBarColor">@color/background</item>
+        <item name="android:colorAccent">@color/device_accent</item>
+    </style>
+    <style name="DeviceSection" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="DeviceInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/device_input_stroke</item>
+        <item name="hintTextColor">@color/device_secondary</item>
+        <item name="android:textColorHint">@color/device_secondary</item>
+    </style>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.misis.devicemanager.data.DeviceRulesTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-25T15:40:30" hostname="DESKTOP-ILDCBJV" time="0.03">
+  <properties/>
+  <testcase name="requiredFieldsAndWriteOffReasonAreValidated" classname="ru.misis.devicemanager.data.DeviceRulesTest" time="0.002"/>
+  <testcase name="inventoryKeysHandleCyrillicCaseAndUnicodeWhitespace" classname="ru.misis.devicemanager.data.DeviceRulesTest" time="0.002"/>
+  <testcase name="multiTermSearchMatchesAcrossDeviceFieldsAndSerial" classname="ru.misis.devicemanager.data.DeviceRulesTest" time="0.01"/>
+  <testcase name="identicalRoomsInDifferentBuildingsAndOrganizationsStayDistinct" classname="ru.misis.devicemanager.data.DeviceRulesTest" time="0.005"/>
+  <testcase name="csvPreservesCyrillicEscapesQuotesAndBlocksFormulas" classname="ru.misis.devicemanager.data.DeviceRulesTest" time="0.008"/>
+  <testcase name="sortIsStableAndUpdatedIsDescending" classname="ru.misis.devicemanager.data.DeviceRulesTest" time="0.002"/>
+  <testcase name="statusAndTrashAreIndependent" classname="ru.misis.devicemanager.data.DeviceRulesTest" time="0.0"/>
+  <testcase name="activeStateRemovesOldWriteOffReasonAndTrimsFields" classname="ru.misis.devicemanager.data.DeviceRulesTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

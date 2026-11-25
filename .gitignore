@@ -17,3 +17,6 @@ Thumbs.db
 
 # Local offline copy of the original Git history
 /.local-backups/
+
+# Temporary native UI captures; selected evidence is saved with each version
+/.impeccable/review/
