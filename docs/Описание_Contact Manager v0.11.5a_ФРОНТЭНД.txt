@@ -1,4 +1,4 @@
-﻿Contact Manager v0.11.5a — ФРОНТЭНД
+Contact Manager v0.11.5a — ФРОНТЭНД
 
 Причина обновления
 Версия 0.11.2 запускалась с ошибкой инициализации (InflateException) у пользователя на Android 13.

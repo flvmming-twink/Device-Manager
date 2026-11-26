@@ -88,7 +88,7 @@
     <string name="export_empty">Нет устройств для экспорта</string>
     <string name="theme_title">Оформление</string>
     <string-array name="device_themes"><item>Светлое</item><item>Тёмное</item><item>Как в системе</item></string-array>
-    <string name="about_title">Device Manager 0.1.0</string>
+    <string name="about_title">Device Manager 1.0.0</string>
     <string name="about_body">Учёт оборудования университета и организаций.\n\nДанные хранятся только на этом устройстве. Серверная синхронизация пока не подключена.\n\nОсновано на Contact Manager.</string>
     <string name="about_action">О приложении</string>
     <string name="ok">Понятно</string>

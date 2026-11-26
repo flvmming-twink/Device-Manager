@@ -1,4 +1,4 @@
-Device Manager v0.1.0 (1)
+Device Manager v1.0.0 (2)
 ФРОНТЭНД
 
 Назначение
