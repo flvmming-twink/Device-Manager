@@ -1,31 +1,71 @@
 <resources>
-    <color name="device_accent">#F59E0B</color>
-    <color name="device_on_accent">#0F172A</color>
-    <color name="device_secondary">#475569</color>
-    <color name="device_active">#166534</color>
-    <color name="device_active_bg">#DCFCE7</color>
-    <color name="device_write_off">#9A3412</color>
-    <color name="device_write_off_bg">#FFEDD5</color>
-    <style name="Theme.DeviceManager" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <color name="device_accent">#1246D5</color>
+    <color name="device_on_accent">#FFFFFF</color>
+    <color name="device_secondary">#526072</color>
+    <color name="device_active">#16643E</color>
+    <color name="device_active_bg">#E2F2E8</color>
+    <color name="device_write_off">#884600</color>
+    <color name="device_write_off_bg">#FFF0D9</color>
+    <color name="device_bar">#1246D5</color>
+    <color name="device_divider">#D4DBE5</color>
+    <color name="device_field">#EDF1F6</color>
+    <style name="Theme.DeviceManager" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/device_accent</item>
-        <item name="colorPrimaryVariant">@color/primary_dark</item>
         <item name="colorOnPrimary">@color/device_on_accent</item>
+        <item name="colorPrimaryContainer">@color/device_field</item>
+        <item name="colorOnPrimaryContainer">@color/text_primary</item>
         <item name="colorSecondary">@color/device_accent</item>
         <item name="colorOnSecondary">@color/device_on_accent</item>
+        <item name="colorSecondaryContainer">@color/device_field</item>
+        <item name="colorOnSecondaryContainer">@color/text_primary</item>
         <item name="colorSurface">@color/surface</item>
         <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorSurfaceVariant">@color/device_field</item>
+        <item name="colorOnSurfaceVariant">@color/device_secondary</item>
+        <item name="colorOutline">@color/card_stroke</item>
         <item name="android:windowBackground">@color/background</item>
-        <item name="android:statusBarColor">#0F172A</item>
+        <item name="android:statusBarColor">@color/device_bar</item>
         <item name="android:navigationBarColor">@color/background</item>
         <item name="android:colorAccent">@color/device_accent</item>
+        <item name="materialButtonStyle">@style/DeviceButton</item>
+        <item name="materialButtonOutlinedStyle">@style/DeviceOutlineButton</item>
+        <item name="android:fontFamily">sans</item>
     </style>
-    <style name="DeviceSection" parent="TextAppearance.MaterialComponents.Subtitle1">
+    <style name="DeviceHeadline" parent="TextAppearance.Material3.HeadlineMedium">
         <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">28sp</item>
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="DeviceInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="DeviceScreenTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="DeviceSection" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/device_accent</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="DeviceButton" parent="Widget.Material3.Button">
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minHeight">52dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:insetTop">4dp</item>
+        <item name="android:insetBottom">4dp</item>
+    </style>
+    <style name="DeviceOutlineButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="cornerRadius">12dp</item>
+        <item name="android:minHeight">52dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="DeviceInput" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/device_input_stroke</item>
         <item name="hintTextColor">@color/device_secondary</item>
         <item name="android:textColorHint">@color/device_secondary</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
     </style>
 </resources>

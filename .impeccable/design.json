@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-27T22:31:19+05:00",
+  "title": "Design System: Device Manager",
+  "extensions": {
+    "shadows": [],
+    "motion": [],
+    "nativePlatform": "Android Views with Material components; native Roboto and sp sizing. HTML snippets below are visual references only.",
+    "evidence": [
+      "app/src/main/res/values/device_styles.xml",
+      "app/src/main/res/values/colors.xml",
+      "app/src/main/res/values-night/colors.xml",
+      "app/src/main/res/values-night/device_colors.xml",
+      "app/src/main/res/layout/activity_devices.xml",
+      "app/src/main/res/layout/item_device.xml",
+      "app/src/main/res/layout/activity_device_editor.xml",
+      "app/src/main/java/ru/misis/devicemanager/ui/QrActivity.kt"
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Filled blue action for the main step on a screen.",
+      "html": "<button class=\"ds-primary\">Сохранить устройство</button>",
+      "css": ".ds-primary{font:400 16px Roboto,Arial,sans-serif;min-height:52px;padding:10px 16px;border:0;border-radius:12px;background:#1246D5;color:#fff}.ds-primary:hover{background:#0E3FBF}.ds-primary:focus-visible{outline:3px solid #526072;outline-offset:2px}.ds-primary:active{background:#0C369F}"
+    },
+    {
+      "name": "Secondary action",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Outlined Material-style action for a secondary task.",
+      "html": "<button class=\"ds-outline\">Ключи организации</button>",
+      "css": ".ds-outline{font:400 16px Roboto,Arial,sans-serif;min-height:52px;padding:10px 16px;border:1px solid #BBC4D2;border-radius:12px;background:#fff;color:#1246D5}.ds-outline:hover{background:#EDF1F6}.ds-outline:focus-visible{outline:3px solid #526072;outline-offset:2px}.ds-outline:active{background:#E4EAF2}"
+    },
+    {
+      "name": "Inventory search",
+      "kind": "input",
+      "refersTo": "search-field",
+      "description": "Neutral search field for name, inventory number, or room.",
+      "html": "<input class=\"ds-search\" placeholder=\"Название, инв. номер, кабинет\" />",
+      "css": ".ds-search{box-sizing:border-box;width:100%;min-height:56px;padding:16px;border:1px solid #BBC4D2;border-radius:12px;background:#EDF1F6;color:#202631;font:400 16px Roboto,Arial,sans-serif}.ds-search:focus-visible{outline:3px solid #1246D5;outline-offset:1px}.ds-search::placeholder{color:#526072}"
+    },
+    {
+      "name": "Selected status filter",
+      "kind": "chip",
+      "refersTo": "filter-selected",
+      "description": "Single-choice filter chip for the active inventory view.",
+      "html": "<button class=\"ds-chip\" aria-pressed=\"true\">Действующие</button>",
+      "css": ".ds-chip{min-height:48px;padding:8px 16px;border:1px solid #BBC4D2;border-radius:12px;background:#fff;color:#202631;font:400 14px Roboto,Arial,sans-serif}.ds-chip[aria-pressed=true]{border-color:#1246D5;background:#1246D5;color:#fff}.ds-chip:focus-visible{outline:3px solid #526072;outline-offset:2px}"
+    },
+    {
+      "name": "Open inventory row",
+      "kind": "custom",
+      "refersTo": "inventory-row",
+      "description": "Open row with device data and a restrained divider.",
+      "html": "<div class=\"ds-row\"><strong>Ноутбук Lenovo</strong><span>Инв. № INV-001</span><span>МИСИС · Корпус: А</span><b>Действующее</b></div>",
+      "css": ".ds-row{display:flex;flex-direction:column;gap:4px;padding:12px 20px;border-bottom:1px solid #D4DBE5;background:#fff;color:#202631;font:400 14px Roboto,Arial,sans-serif}.ds-row strong{font-size:18px;font-weight:700}.ds-row b{margin-top:4px;color:#16643E;font-size:13px}"
+    },
+    {
+      "name": "Room number",
+      "kind": "custom",
+      "refersTo": "inventory-row",
+      "description": "Prominent numeric locator aligned at the row's right edge.",
+      "html": "<div class=\"ds-room\"><strong>305</strong><span>аудитория</span></div>",
+      "css": ".ds-room{display:flex;flex-direction:column;align-items:flex-end;color:#202631;font-family:Roboto,Arial,sans-serif}.ds-room strong{font-size:24px;font-weight:700}.ds-room span{font-size:12px;color:#526072}"
+    },
+    {
+      "name": "Scanner instruction",
+      "kind": "custom",
+      "refersTo": "scanner-caption",
+      "description": "High-contrast camera instruction with stable backing.",
+      "html": "<div class=\"ds-scanner-caption\">Наведите камеру на QR устройства</div>",
+      "css": ".ds-scanner-caption{padding:12px 16px;background:#000;color:#fff;text-align:center;font:400 14px Roboto,Arial,sans-serif}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Технический каталог",
+    "overview": "Рабочий экран строится как реестр оборудования: плоская синяя шапка, ясное название раздела, рядом равные действия добавления и сканирования, затем поиск, фильтры и строки с тонкими разделителями. Номер кабинета вынесен в читаемую правую колонку. Спокойный светлый фон служит для работы с карточками в аудиториях; тёмная схема повторяет ту же иерархию для слабого освещения.\n\nRoboto и компоненты Material дают знакомое поведение Android. Типографика масштабируется системной настройкой, а поля расположения переносятся на новые строки при увеличении размера текста. Строка реестра занимает больше высоты, чем в исходном компе: в экран помещается около двух записей при обычном масштабе. Этот обмен в пользу читаемых названия, статуса и кабинета проверен отдельно на масштабе 130%.",
+    "keyCharacteristics": [
+      "Равное визуальное внимание реестру и сканированию QR.",
+      "Открытые строки и заметный номер кабинета вместо тяжёлой карточной сетки.",
+      "Одна шкала синего для действий и разделов, отдельные подписанные цвета состояний.",
+      "Светлая и тёмная схемы сохраняют контраст и структуру."
+    ],
+    "rules": [
+      { "name": "Подпись статуса", "body": "Цвет дополняет письменный статус и не заменяет его.", "section": "colors" },
+      { "name": "Системная типографика", "body": "Размеры задаются в sp и следуют системному масштабу Android.", "section": "typography" },
+      { "name": "Открытый реестр", "body": "Строки разделяются тонкими линиями; тени и карточная сетка не используются.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do показывать номер кабинета отдельной правой колонкой, сохраняя его видимым при переносе остальных полей.",
+      "Do печатать подпись статуса рядом с цветом.",
+      "Do сохранять одинаковую заметность переходов к реестру и сканированию.",
+      "Do сохранять QR на белом фоне с тихой зоной.",
+      "Do сверять новые размеры с системным масштабом шрифта Android."
+    ],
+    "donts": [
+      "Don't заменять текст статуса одним цветом или значком.",
+      "Don't подменять данные оборудования декоративными счётчиками.",
+      "Don't добавлять тени или градиенты к строкам реестра.",
+      "Don't уменьшать матрицу QR или обрезать её тихую зону ради оформления."
+    ]
+  }
+}

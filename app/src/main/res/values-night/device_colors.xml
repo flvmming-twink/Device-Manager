@@ -1,19 +1,12 @@
 <resources>
-    <color name="device_secondary">#AAB6C8</color>
-    <color name="device_active">#BBF7D0</color>
-    <color name="device_active_bg">#14532D</color>
-    <color name="device_write_off">#FED7AA</color>
-    <color name="device_write_off_bg">#7C2D12</color>
-    <style name="Theme.DeviceManager" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/device_accent</item>
-        <item name="colorOnPrimary">@color/device_on_accent</item>
-        <item name="colorSecondary">@color/device_accent</item>
-        <item name="colorOnSecondary">@color/device_on_accent</item>
-        <item name="colorSurface">@color/surface</item>
-        <item name="colorOnSurface">@color/text_primary</item>
-        <item name="android:windowBackground">@color/background</item>
-        <item name="android:statusBarColor">#0F172A</item>
-        <item name="android:navigationBarColor">@color/background</item>
-        <item name="android:colorAccent">@color/device_accent</item>
-    </style>
+    <color name="device_accent">#A9C1FF</color>
+    <color name="device_on_accent">#092861</color>
+    <color name="device_secondary">#B7C4D8</color>
+    <color name="device_active">#ACDFBE</color>
+    <color name="device_active_bg">#173E2A</color>
+    <color name="device_write_off">#F4CE92</color>
+    <color name="device_write_off_bg">#49351B</color>
+    <color name="device_bar">#183A8D</color>
+    <color name="device_divider">#37475C</color>
+    <color name="device_field">#253248</color>
 </resources>

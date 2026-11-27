@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
     <application
         android:name=".DeviceManagerApplication"
         android:allowBackup="false"
@@ -14,5 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.QrActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.QrPortraitActivity" android:exported="false" android:screenOrientation="portrait" android:stateNotNeeded="true" />
     </application>
 </manifest>

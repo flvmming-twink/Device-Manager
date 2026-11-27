@@ -1,0 +1,304 @@
+D:\Contact Manager + Device Manager\app\build.gradle:42: Warning: A newer version of com.android.tools:desugar_jdk_libs than 2.0.4 is available: 2.1.5 [GradleDependency]
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.4"
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\build.gradle:43: Warning: A newer version of androidx.core:core-ktx than 1.13.1 is available: 1.19.1 [GradleDependency]
+    implementation "androidx.core:core-ktx:1.13.1"
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\build.gradle:44: Warning: A newer version of androidx.appcompat:appcompat than 1.7.0 is available: 1.8.0 [GradleDependency]
+    implementation "androidx.appcompat:appcompat:1.7.0"
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\build.gradle:45: Warning: A newer version of com.google.android.material:material than 1.12.0 is available: 1.14.0 [GradleDependency]
+    implementation "com.google.android.material:material:1.12.0"
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\build.gradle:46: Warning: A newer version of androidx.recyclerview:recyclerview than 1.3.2 is available: 1.4.0 [GradleDependency]
+    implementation "androidx.recyclerview:recyclerview:1.3.2"
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\build.gradle:47: Warning: A newer version of androidx.lifecycle:lifecycle-runtime-ktx than 2.6.2 is available: 2.11.1 [GradleDependency]
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\build.gradle:48: Warning: A newer version of androidx.lifecycle:lifecycle-viewmodel-ktx than 2.6.2 is available: 2.11.1 [GradleDependency]
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\build.gradle:49: Warning: A newer version of androidx.lifecycle:lifecycle-livedata-ktx than 2.6.2 is available: 2.11.1 [GradleDependency]
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.2"
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "GradleDependency":
+   This detector looks for usages of libraries where the version you are using
+   is not the current stable release. Using older versions is fine, and there
+   are cases where you deliberately want to stick with an older version.
+   However, you may simply not be aware that a more recent version is
+   available, and that is what this lint check helps find.
+
+D:\Contact Manager + Device Manager\app\src\main\AndroidManifest.xml:20: Warning: Expecting android:screenOrientation="unspecified" or "fullSensor" for this activity so the user can use the application in any orientation and provide a great experience on Chrome OS devices [LockedOrientationActivity]
+        <activity android:name=".ui.QrPortraitActivity" android:exported="false" android:screenOrientation="portrait" android:stateNotNeeded="true" />
+                                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "LockedOrientationActivity":
+   The <activity> element should not be locked to any orientation so that
+   users can take advantage of the multi-window environments and larger
+   screens available on Android. To fix the issue, consider declaring the
+   corresponding activity element with `screenOrientation="unspecified"or
+   "fullSensor"` attribute.
+
+   https://developer.android.com/topic/arc/window-management
+
+D:\Contact Manager + Device Manager\app\src\main\AndroidManifest.xml:6: Warning: The attribute android:allowBackup is deprecated from Android 12 and higher and may be removed in future versions. Consider adding the attribute android:dataExtractionRules specifying an @xml resource which configures cloud backups and device transfers on Android 12 and higher. [DataExtractionRules]
+        android:allowBackup="false"
+                             ~~~~~
+
+   Explanation for issues of type "DataExtractionRules":
+   Before Android 12, the attributes android:allowBackup and
+   android:fullBackupContent were used to configure all forms of backup,
+   including cloud backups, device-to-device transfers and adb backup.
+
+   In Android 12 and higher, these attributes have been deprecated and will
+   only apply to cloud backups. You should instead use the attribute
+   android:dataExtractionRules, specifying an @xml resource that configures
+   which files to back up, for cloud backups and for device-to-device
+   transfers, separately. If your minSdkVersion supports older versions,
+   you'll still want to specify an android:fullBackupContent resource if the
+   default behavior is not right for your app.
+
+   https://developer.android.com/about/versions/12/backup-restore#xml-changes
+   https://goo.gle/DataExtractionRules
+
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_contacts_header_white.xml:9: Warning: Very long vector path (811 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector. [VectorPath]
+        android:pathData="M160,64C124.7,64 96,92.7 96,128L96,512C96,547.3 124.7,576 160,576L448,576C483.3,576 512,547.3 512,512L512,128C512,92.7 483.3,64 448,64L160,64zM272,352L336,352C380.2,352 416,387.8 416,432C416,440.8 408.8,448 400,448L208,448C199.2,448 192,440.8 192,432C192,387.8 227.8,352 272,352zM248,256C248,225.1 273.1,200 304,200C334.9,200 360,225.1 360,256C360,286.9 334.9,312 304,312C273.1,312 248,286.9 248,256zM576,144C576,135.2 568.8,128 560,128C551.2,128 544,135.2 544,144L544,208C544,216.8 551.2,224 560,224C568.8,224 576,216.8 576,208L576,144zM576,272C576,263.2 568.8,256 560,256C551.2,256 544,263.2 544,272L544,336C544,344.8 551.2,352 560,352C568.8,352 576,344.8 576,336L576,272zM560,384C551.2,384 544,391.2 544,400L544,464C544,472.8 551.2,480 560,480C568.8,480 576,472.8 576,464L576,400C576,391.2 568.8,384 560,384z" />
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_header_settings.xml:9: Warning: Very long vector path (1037 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector. [VectorPath]
+        android:pathData="M259.1,73.5C262.1,58.7 275.2,48 290.4,48L350.2,48C365.4,48 378.5,58.7 381.5,73.5L396,143.5C410.1,149.5 423.3,157.2 435.3,166.3L503.1,143.8C517.5,139 533.3,145 540.9,158.2L570.8,210C578.4,223.2 575.7,239.8 564.3,249.9L511,297.3C511.9,304.7 512.3,312.3 512.3,320C512.3,327.7 511.8,335.3 511,342.7L564.4,390.2C575.8,400.3 578.4,417 570.9,430.1L541,481.9C533.4,495 517.6,501.1 503.2,496.3L435.4,473.8C423.3,482.9 410.1,490.5 396.1,496.6L381.7,566.5C378.6,581.4 365.5,592 350.4,592L290.6,592C275.4,592 262.3,581.3 259.3,566.5L244.9,496.6C230.8,490.6 217.7,482.9 205.6,473.8L137.5,496.3C123.1,501.1 107.3,495.1 99.7,481.9L69.8,430.1C62.2,416.9 64.9,400.3 76.3,390.2L129.7,342.7C128.8,335.3 128.4,327.7 128.4,320C128.4,312.3 128.9,304.7 129.7,297.3L76.3,249.8C64.9,239.7 62.3,223 69.8,209.9L99.7,158.1C107.3,144.9 123.1,138.9 137.5,143.7L205.3,166.2C217.4,157.1 230.6,149.5 244.6,143.4L259.1,73.5zM320.3,400C364.5,399.8 400.2,363.9 400,319.7C399.8,275.5 363.9,239.8 319.7,240C275.5,240.2 239.8,276.1 240,320.3C240.2,364.5 276.1,400.2 320.3,400z" />
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_qrcode.xml:8: Warning: Very long vector path (1168 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector. [VectorPath]
+        android:pathData="M160,224L224,224L224,160L160,160L160,224zM96,144C96,117.5 117.5,96 144,96L240,96C266.5,96 288,117.5 288,144L288,240C288,266.5 266.5,288 240,288L144,288C117.5,288 96,266.5 96,240L96,144zM160,480L224,480L224,416L160,416L160,480zM96,400C96,373.5 117.5,352 144,352L240,352C266.5,352 288,373.5 288,400L288,496C288,522.5 266.5,544 240,544L144,544C117.5,544 96,522.5 96,496L96,400zM416,160L416,224L480,224L480,160L416,160zM400,96L496,96C522.5,96 544,117.5 544,144L544,240C544,266.5 522.5,288 496,288L400,288C373.5,288 352,266.5 352,240L352,144C352,117.5 373.5,96 400,96zM384,416C366.3,416 352,401.7 352,384C352,366.3 366.3,352 384,352C401.7,352 416,366.3 416,384C416,401.7 401.7,416 384,416zM384,480C401.7,480 416,494.3 416,512C416,529.7 401.7,544 384,544C366.3,544 352,529.7 352,512C352,494.3 366.3,480 384,480zM480,512C480,494.3 494.3,480 512,480C529.7,480 544,494.3 544,512C544,529.7 529.7,544 512,544C494.3,544 480,529.7 480,512zM512,416C494.3,416 480,401.7 480,384C480,366.3 494.3,352 512,352C529.7,352 544,366.3 544,384C544,401.7 529.7,416 512,416zM480,448C480,465.7 465.7,480 448,480C430.3,480 416,465.7 416,448C416,430.3 430.3,416 448,416C465.7,416 480,430.3 480,448z" />
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "VectorPath":
+   Using long vector paths is bad for performance. There are several ways to
+   make the pathData shorter:
+   * Using less precision
+   * Removing some minor details
+   * Using the Android Studio vector conversion tool
+   * Rasterizing the image (converting to PNG)
+
+D:\Contact Manager + Device Manager\app\src\main\res\layout\item_device.xml:4: Warning: Set android:baselineAligned="false" on this element for better performance [DisableBaselineAlignment]
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingStart="20dp" android:paddingEnd="8dp" android:paddingTop="12dp" android:paddingBottom="12dp" android:gravity="top">
+     ~~~~~~~~~~~~
+
+   Explanation for issues of type "DisableBaselineAlignment":
+   When a LinearLayout is used to distribute the space proportionally between
+   nested layouts, the baseline alignment property should be turned off to
+   make the layout computation faster.
+
+D:\Contact Manager + Device Manager\app\src\main\res\layout\activity_devices.xml:2: Warning: Possible overdraw: Root element paints background @color/surface with a theme that also paints a background (inferred theme is @style/Theme.DeviceManager) [Overdraw]
+    android:id="@+id/deviceRoot" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="@color/surface">
+                                                                                                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\layout\item_device.xml:2: Warning: Possible overdraw: Root element paints background ?attr/selectableItemBackground with a theme that also paints a background (inferred theme is @style/Theme.DeviceManager) [Overdraw]
+    android:id="@+id/deviceCard" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:clickable="true" android:focusable="true" android:background="?attr/selectableItemBackground">
+                                                                                                                                                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\layout\item_sort_spinner_dropdown.xml:6: Warning: Possible overdraw: Root element paints background @color/surface with a theme that also paints a background (inferred theme is @style/Theme.DeviceManager) [Overdraw]
+    android:background="@color/surface"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "Overdraw":
+   If you set a background drawable on a root view, then you should use a
+   custom theme where the theme background is null. Otherwise, the theme
+   background will be painted first, only to have your custom background
+   completely cover it; this is called "overdraw".
+
+   NOTE: This detector relies on figuring out which layouts are associated
+   with which activities based on scanning the Java code, and it's currently
+   doing that using an inexact pattern matching algorithm. Therefore, it can
+   incorrectly conclude which activity the layout is associated with and then
+   wrongly complain that a background-theme is hidden.
+
+   If you want your custom background on multiple pages, then you should
+   consider making a custom theme with your custom background and just using
+   that theme instead of a root element background.
+
+   Of course it's possible that your custom drawable is translucent and you
+   want it to be mixed with the background. However, you will get better
+   performance if you pre-mix the background with your drawable and use that
+   resulting image or color as a custom theme background instead.
+
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\battery_status_white.xml:1: Warning: The resource R.drawable.battery_status_white appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_app_gradient.xml:2: Warning: The resource R.drawable.bg_app_gradient appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_avatar_color_preview.xml:2: Warning: The resource R.drawable.bg_avatar_color_preview appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_avatar_gradient.xml:2: Warning: The resource R.drawable.bg_avatar_gradient appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_avatar_rounded.xml:2: Warning: The resource R.drawable.bg_avatar_rounded appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_button_gradient_rect.xml:2: Warning: The resource R.drawable.bg_button_gradient_rect appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_contact_card.xml:2: Warning: The resource R.drawable.bg_contact_card appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_contact_card_rounded.xml:2: Warning: The resource R.drawable.bg_contact_card_rounded appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_dialog_input.xml:2: Warning: The resource R.drawable.bg_dialog_input appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_dialog_surface.xml:2: Warning: The resource R.drawable.bg_dialog_surface appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_fab_gradient_circle.xml:2: Warning: The resource R.drawable.bg_fab_gradient_circle appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_group_selected_gradient.xml:2: Warning: The resource R.drawable.bg_group_selected_gradient appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_group_unselected.xml:2: Warning: The resource R.drawable.bg_group_unselected appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_header_gradient.xml:2: Warning: The resource R.drawable.bg_header_gradient appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_logo_ring.xml:2: Warning: The resource R.drawable.bg_logo_ring appears to be unused [UnusedResources]
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_phone_container.xml:2: Warning: The resource R.drawable.bg_phone_container appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_search_box.xml:2: Warning: The resource R.drawable.bg_search_box appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_sort_spinner.xml:2: Warning: The resource R.drawable.bg_sort_spinner appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_sort_spinner_popup.xml:2: Warning: The resource R.drawable.bg_sort_spinner_popup appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_stats_pill.xml:2: Warning: The resource R.drawable.bg_stats_pill appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_top_header_gradient.xml:2: Warning: The resource R.drawable.bg_top_header_gradient appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\bg_work_badge.xml:2: Warning: The resource R.drawable.bg_work_badge appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\color\chip_bg.xml:2: Warning: The resource R.color.chip_bg appears to be unused [UnusedResources]
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\color\chip_text.xml:2: Warning: The resource R.color.chip_text appears to be unused [UnusedResources]
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\values\colors.xml:3: Warning: The resource R.color.primary_dark appears to be unused [UnusedResources]
+    <color name="primary_dark">#3A56D4</color>
+           ~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\values\colors.xml:8: Warning: The resource R.color.text_secondary appears to be unused [UnusedResources]
+    <color name="text_secondary">#6C757D</color>
+           ~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\values\colors.xml:9: Warning: The resource R.color.group_tab_text appears to be unused [UnusedResources]
+    <color name="group_tab_text">#1E293B</color>
+           ~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\values\colors.xml:10: Warning: The resource R.color.stats_text appears to be unused [UnusedResources]
+    <color name="stats_text">#FBBF24</color>
+           ~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\values\colors.xml:12: Warning: The resource R.color.contact_name appears to be unused [UnusedResources]
+    <color name="contact_name">#0F172A</color>
+           ~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\values\colors.xml:13: Warning: The resource R.color.contact_phone appears to be unused [UnusedResources]
+    <color name="contact_phone">#475569</color>
+           ~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\values\colors.xml:14: Warning: The resource R.color.phone_icon_tint appears to be unused [UnusedResources]
+    <color name="phone_icon_tint">#BBC4D2</color>
+           ~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\values\device_styles.xml:6: Warning: The resource R.color.device_active_bg appears to be unused [UnusedResources]
+    <color name="device_active_bg">#E2F2E8</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\values\device_styles.xml:8: Warning: The resource R.color.device_write_off_bg appears to be unused [UnusedResources]
+    <color name="device_write_off_bg">#FFF0D9</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\dot_status_white.xml:1: Warning: The resource R.drawable.dot_status_white appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\xml\file_paths.xml:2: Warning: The resource R.xml.file_paths appears to be unused [UnusedResources]
+<paths>
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_backward.xml:2: Warning: The resource R.drawable.ic_backward appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_contacts_header_white.xml:2: Warning: The resource R.drawable.ic_contacts_header_white appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_delete_gray_20.xml:1: Warning: The resource R.drawable.ic_delete_gray_20 appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_device.xml:1: Warning: The resource R.drawable.ic_device appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_edit_gray_20.xml:1: Warning: The resource R.drawable.ic_edit_gray_20 appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_header_google.xml:2: Warning: The resource R.drawable.ic_header_google appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_header_import_contacts.xml:2: Warning: The resource R.drawable.ic_header_import_contacts appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_header_settings.xml:2: Warning: The resource R.drawable.ic_header_settings appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_heart_regular.xml:1: Warning: The resource R.drawable.ic_heart_regular appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_import_white_20.xml:1: Warning: The resource R.drawable.ic_import_white_20 appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_launcher_app.xml:2: Warning: The resource R.drawable.ic_launcher_app appears to be unused [UnusedResources]
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_phone_16.xml:2: Warning: The resource R.drawable.ic_phone_16 appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_qrcode.xml:1: Warning: The resource R.drawable.ic_qrcode appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_user_white_20.xml:1: Warning: The resource R.drawable.ic_user_white_20 appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\Contact Manager + Device Manager\app\src\main\res\drawable\ic_work_green_20.xml:1: Warning: The resource R.drawable.ic_work_green_20 appears to be unused [UnusedResources]
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\Contact Manager + Device Manager\app\src\main\res\values\integers.xml:3: Warning: The resource R.integer.update_sequence appears to be unused [UnusedResources]
+    <integer name="update_sequence">36</integer>
+             ~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\values\strings.xml:42: Warning: The resource R.string.room_card appears to be unused [UnusedResources]
+    <string name="room_card">Кабинет / аудитория: %1$s</string>
+            ~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\values\strings.xml:44: Warning: The resource R.string.responsible_card appears to be unused [UnusedResources]
+    <string name="responsible_card">Ответственный: %1$s</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\values\styles.xml:3: Warning: The resource R.style.Widget_ContactManager_GradientButton_Small appears to be unused [UnusedResources]
+    <style name="Widget.ContactManager.GradientButton.Small" parent="Widget.AppCompat.Button">
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\Contact Manager + Device Manager\app\src\main\res\values\themes.xml:2: Warning: The resource R.style.Theme_ContactManagerDemo appears to be unused [UnusedResources]
+    <style name="Theme.ContactManagerDemo" parent="Theme.AppCompat.DayNight.NoActionBar">
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "UnusedResources":
+   Unused resources make applications larger and slow down builds.
+
+
+   The unused resource check can ignore tests. If you want to include
+   resources that are only referenced from tests, consider packaging them in a
+   test source set instead.
+
+   You can include test sources in the unused resource check by setting the
+   system property lint.unused-resources.include-tests =true, and to exclude
+   them (usually for performance reasons), use
+   lint.unused-resources.exclude-tests =true.
+   ,
+
+0 errors, 72 warnings

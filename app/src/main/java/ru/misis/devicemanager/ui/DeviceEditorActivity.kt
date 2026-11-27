@@ -14,6 +14,7 @@ import ru.misis.devicemanager.R
 import ru.misis.devicemanager.data.*
 import java.text.DateFormat
 import java.util.Date
+import ru.misis.devicemanager.qr.DeviceQrCodec
 
 class DeviceEditorActivity : DeviceActivity() {
     private lateinit var model: DeviceEditorViewModel
@@ -50,6 +51,12 @@ class DeviceEditorActivity : DeviceActivity() {
         }
         findViewById<View>(R.id.editorSave).setOnClickListener { model.save(draft()) }
         findViewById<View>(R.id.editorBack).setOnClickListener { requestBack() }
+        findViewById<View>(R.id.editorQr).setOnClickListener {
+            val saved = model.state.value?.device ?: return@setOnClickListener
+            if (intent.hasExtra(EXTRA_IMPORT) || draft().normalized() != saved.normalized()) {
+                Snackbar.make(findViewById(R.id.editorRoot), "Сначала сохраните изменения, затем откройте QR из реестра.", Snackbar.LENGTH_LONG).show()
+            } else startActivity(android.content.Intent(this, QrActivity::class.java).putExtra(QrActivity.EXTRA_ID, saved.id))
+        }
         findViewById<View>(R.id.editorDelete).setOnClickListener {
             val device = model.state.value!!.device ?: return@setOnClickListener
             MaterialAlertDialogBuilder(this).setTitle(R.string.delete_device)
@@ -60,7 +67,8 @@ class DeviceEditorActivity : DeviceActivity() {
             override fun handleOnBackPressed() { requestBack() }
         })
         model.state.observe(this) { render(it) }
-        model.initialize(intent.getLongExtra(EXTRA_ID, 0), intent.getStringExtra(EXTRA_STATUS)?.let { DeviceStatus.valueOf(it) })
+        val incoming = intent.getStringExtra(EXTRA_IMPORT)?.let { runCatching { DeviceQrCodec.decode(it) }.getOrNull() }
+        model.initialize(intent.getLongExtra(EXTRA_ID, 0), intent.getStringExtra(EXTRA_STATUS)?.let { DeviceStatus.valueOf(it) }, incoming)
         updateStatus()
     }
 
@@ -74,6 +82,10 @@ class DeviceEditorActivity : DeviceActivity() {
         findViewById<View>(R.id.editorDelete).apply {
             isVisible = (state.device?.id ?: 0) != 0L
             isEnabled = !state.saving
+        }
+        findViewById<View>(R.id.editorQr).apply {
+            isVisible = (state.device?.id ?: 0L) != 0L
+            isEnabled = !state.saving && !state.loading
         }
         fieldIds.forEach { findViewById<View>(it).isEnabled = !state.loading && !state.saving }
         findViewById<View>(R.id.editStatus).isEnabled = !state.loading && !state.saving
@@ -161,7 +173,7 @@ class DeviceEditorActivity : DeviceActivity() {
 
     private fun requestBack() {
         if (model.state.value!!.saving) return
-        if (bound && draft().normalized() != baseline?.normalized()) {
+        if (bound && (intent.hasExtra(EXTRA_IMPORT) || draft().normalized() != baseline?.normalized())) {
             MaterialAlertDialogBuilder(this).setTitle(R.string.unsaved_title).setMessage(R.string.unsaved_body)
                 .setNegativeButton(R.string.stay, null).setPositiveButton(R.string.discard) { _, _ -> finish() }.show()
         } else finish()
@@ -178,5 +190,6 @@ class DeviceEditorActivity : DeviceActivity() {
     companion object {
         const val EXTRA_ID = "device_id"
         const val EXTRA_STATUS = "device_status"
+        const val EXTRA_IMPORT = "device_import"
     }
 }

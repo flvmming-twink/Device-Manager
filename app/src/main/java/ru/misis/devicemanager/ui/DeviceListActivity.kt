@@ -97,6 +97,9 @@ class DeviceListActivity : DeviceActivity() {
             }
         }
         findViewById<View>(R.id.addDevice).setOnClickListener { edit(null) }
+        findViewById<View>(R.id.scanDevice).setOnClickListener {
+            startActivity(Intent(this, QrActivity::class.java).putExtra(QrActivity.EXTRA_SCAN, true))
+        }
         findViewById<View>(R.id.locationFilters).setOnClickListener { showFilters() }
         findViewById<View>(R.id.deviceMenu).setOnClickListener { showMenu(it) }
         findViewById<View>(R.id.deviceRetry).setOnClickListener {
@@ -127,7 +130,7 @@ class DeviceListActivity : DeviceActivity() {
         val state = model.state.value ?: return
         val filter = model.filter
         backFromTrash.isEnabled = filter.trash
-        findViewById<TextView>(R.id.deviceTitle).setText(if (filter.trash) R.string.trash_title else R.string.app_name)
+        findViewById<TextView>(R.id.deviceTitle).setText(if (filter.trash) R.string.trash_title else R.string.section_device)
         findViewById<View>(R.id.addDevice).isVisible = !filter.trash
         findViewById<View>(R.id.deviceLoading).isVisible = state.loading
         val scope = state.devices.filter { (it.deletedAt != null) == filter.trash }
@@ -180,6 +183,7 @@ class DeviceListActivity : DeviceActivity() {
                 menu.add(0, 1, 0, R.string.edit_action)
                 menu.add(0, 2, 1, if (device.status == DeviceStatus.ACTIVE) R.string.mark_write_off else R.string.mark_active)
                 menu.add(0, 3, 2, R.string.delete_device)
+                menu.add(0, 6, 3, R.string.qr_action)
             } else {
                 menu.add(0, 4, 0, R.string.restore_device)
                 menu.add(0, 5, 1, R.string.delete_forever)
@@ -191,6 +195,7 @@ class DeviceListActivity : DeviceActivity() {
                     3 -> confirmDelete(device, false)
                     4 -> model.mutate(device.id, "restore")
                     5 -> confirmDelete(device, true)
+                    6 -> startActivity(Intent(this@DeviceListActivity, QrActivity::class.java).putExtra(QrActivity.EXTRA_ID, device.id))
                 }
                 true
             }
@@ -215,6 +220,7 @@ class DeviceListActivity : DeviceActivity() {
             if (!model.filter.trash) menu.add(0, 2, 1, R.string.export_csv)
             menu.add(0, 3, 2, R.string.theme_title)
             menu.add(0, 4, 3, R.string.about_action)
+            menu.add(0, 5, 4, R.string.qr_hub)
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     1 -> toggleTrash(!model.filter.trash)
@@ -232,6 +238,7 @@ class DeviceListActivity : DeviceActivity() {
                         }.setNegativeButton(R.string.cancel, null).show()
                     4 -> MaterialAlertDialogBuilder(this@DeviceListActivity).setTitle(R.string.about_title)
                         .setMessage(R.string.about_body).setPositiveButton(R.string.ok, null).show()
+                    5 -> startActivity(Intent(this@DeviceListActivity, QrActivity::class.java))
                 }
                 true
             }

@@ -1,6 +1,5 @@
 package ru.misis.devicemanager.ui
 
-import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,22 +34,15 @@ class DeviceAdapter(
         }
         text(R.id.cardName, device.name)
         text(R.id.cardInventory, context.getString(R.string.inventory_number_card, device.inventoryNumber))
-        text(R.id.cardCategory, device.category)
+        text(R.id.cardRoom, device.room)
         text(R.id.cardLocation, listOf(
             device.organization,
             device.building.takeIf(String::isNotBlank)?.let { context.getString(R.string.building_card, it) },
-            context.getString(R.string.room_card, device.room),
-        ).filterNotNull().joinToString("\n"))
-        text(R.id.cardResponsible, if (device.responsible.isBlank()) "" else
-            context.getString(R.string.responsible_card, device.responsible))
+        ).filterNotNull().joinToString(" · "))
         val active = device.status == DeviceStatus.ACTIVE
         view.findViewById<TextView>(R.id.cardStatus).apply {
             setText(if (active) R.string.status_active else R.string.status_write_off)
             setTextColor(ContextCompat.getColor(context, if (active) R.color.device_active else R.color.device_write_off))
-            background = GradientDrawable().apply {
-                cornerRadius = 8 * resources.displayMetrics.density
-                setColor(ContextCompat.getColor(context, if (active) R.color.device_active_bg else R.color.device_write_off_bg))
-            }
         }
         view.setOnClickListener { open(device) }
         view.findViewById<ImageButton>(R.id.cardMenu).apply {

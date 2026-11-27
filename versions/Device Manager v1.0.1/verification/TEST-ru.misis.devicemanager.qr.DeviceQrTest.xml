@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.misis.devicemanager.qr.DeviceQrTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-11-27T10:24:39" hostname="DESKTOP-ILDCBJV" time="11.106">
+  <properties/>
+  <testcase name="publicJsonPreservesAllFieldsButNeverLocalIdentity" classname="ru.misis.devicemanager.qr.DeviceQrTest" time="0.068"/>
+  <testcase name="oversizeContentNeverGetsSilentlyTruncated" classname="ru.misis.devicemanager.qr.DeviceQrTest" time="0.064"/>
+  <testcase name="modifiedCiphertextAndAuthenticatedMetadataAreRejected" classname="ru.misis.devicemanager.qr.DeviceQrTest" time="0.423"/>
+  <testcase name="organizationKeyExportImportPreservesQrAccessAndRejectsWrongPassword" classname="ru.misis.devicemanager.qr.DeviceQrTest" time="7.719"/>
+  <testcase name="freshAesKeyAndNonceMakeRepeatedQrDifferent" classname="ru.misis.devicemanager.qr.DeviceQrTest" time="0.172"/>
+  <testcase name="missingAndWrongKeysFailClosed" classname="ru.misis.devicemanager.qr.DeviceQrTest" time="0.663"/>
+  <testcase name="unknownVersionsAlgorithmsTypesAndInvalidFieldsFail" classname="ru.misis.devicemanager.qr.DeviceQrTest" time="0.357"/>
+  <testcase name="secureQrFitsAndVisualDecoderRecoversIt" classname="ru.misis.devicemanager.qr.DeviceQrTest" time="1.057"/>
+  <testcase name="visualQrIsActuallyReadableBackAsJson" classname="ru.misis.devicemanager.qr.DeviceQrTest" time="0.301"/>
+  <testcase name="inputFilesAreBoundedBeforeBitmapAllocation" classname="ru.misis.devicemanager.qr.DeviceQrTest" time="0.039"/>
+  <testcase name="encryptedRoundTripUsesOnlyMatchingPrivateKey" classname="ru.misis.devicemanager.qr.DeviceQrTest" time="0.242"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

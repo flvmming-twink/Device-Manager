@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.misis.devicemanager.ui.InventoryFlowTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-27T10:24:50" hostname="DESKTOP-ILDCBJV" time="7.137">
+  <properties/>
+  <testcase name="createDeviceThroughEditorThenFindByRoomAndInventory" classname="ru.misis.devicemanager.ui.InventoryFlowTest" time="4.356"/>
+  <testcase name="unsavedDraftSurvivesActivityRecreation" classname="ru.misis.devicemanager.ui.InventoryFlowTest" time="1.579"/>
+  <testcase name="writeOffRequiresReasonAndPersistsAfterEditingLocation" classname="ru.misis.devicemanager.ui.InventoryFlowTest" time="0.673"/>
+  <testcase name="scannedSnapshotIsOnlyAppliedAfterExplicitEditorSave" classname="ru.misis.devicemanager.ui.InventoryFlowTest" time="0.529"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

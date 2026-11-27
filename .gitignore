@@ -20,3 +20,10 @@ Thumbs.db
 
 # Temporary native UI captures; selected evidence is saved with each version
 /.impeccable/review/
+/.impeccable/build/
+/.impeccable/decisions/
+/.impeccable/questions/
+/.impeccable/mocks/*
+!/.impeccable/mocks/variant2.png
+!/.impeccable/mocks/variant2.png.json
+!/.impeccable/mocks/variant2.prompt.txt

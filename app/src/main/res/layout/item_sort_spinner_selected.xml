@@ -5,11 +5,11 @@
     android:layout_height="wrap_content"
     android:ellipsize="end"
     android:gravity="center_vertical"
-    android:maxLines="1"
+    android:maxLines="2"
     android:paddingStart="12dp"
     android:paddingTop="10dp"
     android:paddingEnd="12dp"
     android:paddingBottom="10dp"
     android:textColor="@color/text_primary"
-    android:textSize="13sp" />
+    android:textSize="14sp" />
 

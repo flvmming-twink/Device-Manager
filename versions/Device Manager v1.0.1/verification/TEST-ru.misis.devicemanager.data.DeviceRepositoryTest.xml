@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.misis.devicemanager.data.DeviceRepositoryTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-11-27T10:24:30" hostname="DESKTOP-ILDCBJV" time="8.833">
+  <properties/>
+  <testcase name="editingLocationStatusAndInventoryDoesNotDuplicateRecord" classname="ru.misis.devicemanager.data.DeviceRepositoryTest" time="7.327"/>
+  <testcase name="emptyDatabaseDoesNotCreateDemoEquipmentOrImportContacts" classname="ru.misis.devicemanager.data.DeviceRepositoryTest" time="0.255"/>
+  <testcase name="staleEditorsCannotResurrectDeletedRecords" classname="ru.misis.devicemanager.data.DeviceRepositoryTest" time="0.174"/>
+  <testcase name="duplicateEditIsAtomicAndDoesNotDestroyPreviousRecord" classname="ru.misis.devicemanager.data.DeviceRepositoryTest" time="0.172"/>
+  <testcase name="permanentDeletionIsOnlyAllowedFromTrashAndReleasesNumber" classname="ru.misis.devicemanager.data.DeviceRepositoryTest" time="0.211"/>
+  <testcase name="trashRestoresFullRecordAndReservedInventoryNumber" classname="ru.misis.devicemanager.data.DeviceRepositoryTest" time="0.265"/>
+  <testcase name="duplicateKeysAreRejectedWithinAnOrganizationIncludingCyrillicCase" classname="ru.misis.devicemanager.data.DeviceRepositoryTest" time="0.161"/>
+  <testcase name="invalidWritesAreRejectedWithoutMutatingStorage" classname="ru.misis.devicemanager.data.DeviceRepositoryTest" time="0.111"/>
+  <testcase name="allFieldsSurviveDatabaseReopen" classname="ru.misis.devicemanager.data.DeviceRepositoryTest" time="0.152"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

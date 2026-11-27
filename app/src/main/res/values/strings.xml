@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Device Manager</string>
     <string name="inventory_title">Учёт устройств</string>
-    <string name="inventory_stats">Всего: %1$d · Действующих: %2$d\nНа списание: %3$d</string>
+    <string name="inventory_stats">Всего %1$d · Действуют %2$d · На списание %3$d</string>
     <string name="trash_title">Корзина</string>
     <string name="trash_stats">Удалённых устройств: %1$d</string>
     <string name="add_device">Добавить устройство</string>
@@ -16,7 +16,7 @@
     <string name="status_active">Действующее</string>
     <string name="status_write_off">На списание</string>
     <string name="filter_active">Действующие</string>
-    <string name="filter_location">Расположение и тип</string>
+    <string name="filter_location">Место и тип</string>
     <string name="filters_title">Фильтры оборудования</string>
     <string name="filters_applied">Фильтры: %1$d</string>
     <string name="filter_any">Все</string>
@@ -93,4 +93,9 @@
     <string name="about_action">О приложении</string>
     <string name="ok">Понятно</string>
     <string name="updated_at">Изменено: %1$s</string>
+    <string name="scan_qr">Сканировать QR</string>
+    <string name="qr_action">QR-код</string>
+    <string name="qr_hub">QR-метки и ключи</string>
+    <string name="add_short">Добавить</string>
+    <string name="room_short">аудитория</string>
 </resources>

@@ -86,12 +86,14 @@ class DeviceEditorViewModel(app: Application) : AndroidViewModel(app) {
     private var initialized = false
     private var requestedId = 0L
     private var requestedStatus: DeviceStatus? = null
+    private var imported: Device? = null
 
-    fun initialize(id: Long, status: DeviceStatus?) {
+    fun initialize(id: Long, status: DeviceStatus?, incoming: Device? = null) {
         if (initialized) return
         initialized = true
         requestedId = id
         requestedStatus = status
+        imported = incoming
         load()
     }
 
@@ -106,7 +108,11 @@ class DeviceEditorViewModel(app: Application) : AndroidViewModel(app) {
                 }
                 val valid = record?.takeIf { it.deletedAt == null }
                 state.value = EditorState(
-                    device = valid?.let { if (requestedStatus == null) it else it.copy(status = requestedStatus!!) },
+                    device = valid?.let { original ->
+                        val draft = imported?.copy(id = original.id, createdAt = original.createdAt,
+                            updatedAt = original.updatedAt, deletedAt = null) ?: original
+                        if (requestedStatus == null) draft else draft.copy(status = requestedStatus!!)
+                    },
                     suggestions = suggestions, loading = false,
                     error = if (valid == null) R.string.missing_device else null,
                 )

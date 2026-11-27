@@ -41,6 +41,28 @@ class InventoryFlowTest {
         assertTrue("UI operation timed out", condition())
     }
 
+    @Test fun scannedSnapshotIsOnlyAppliedAfterExplicitEditorSave() {
+        val saved = (repository.save(Device(name = "Проектор", inventoryNumber = "QR-1", organization = "МИСИС", room = "101")) as SaveResult.Saved).device
+        val incoming = saved.copy(room = "305", status = DeviceStatus.WRITE_OFF, writeOffReason = "Износ")
+        val intent = Intent(app, DeviceEditorActivity::class.java)
+            .putExtra(DeviceEditorActivity.EXTRA_ID, saved.id)
+            .putExtra(DeviceEditorActivity.EXTRA_IMPORT, ru.misis.devicemanager.qr.DeviceQrCodec.encodeOpen(incoming))
+        val controller = Robolectric.buildActivity(DeviceEditorActivity::class.java, intent).setup().visible()
+        val activity = controller.get()
+        val model = ViewModelProvider(activity)[DeviceEditorViewModel::class.java]
+        await { !model.state.value!!.loading }
+        assertEquals("101", repository.find(saved.id)!!.room)
+        assertEquals("305", activity.findViewById<EditText>(R.id.editRoom).text.toString())
+        activity.findViewById<android.view.View>(R.id.editorSave).performClick()
+        await { activity.isFinishing }
+        val updated = repository.all().single()
+        assertEquals(saved.id, updated.id)
+        assertEquals(saved.createdAt, updated.createdAt)
+        assertEquals("305", updated.room)
+        assertEquals(DeviceStatus.WRITE_OFF, updated.status)
+        controller.pause().stop().destroy()
+    }
+
     @Test fun createDeviceThroughEditorThenFindByRoomAndInventory() {
         val controller = Robolectric.buildActivity(DeviceEditorActivity::class.java).setup().visible()
         val activity = controller.get()
