@@ -4,59 +4,16 @@ import org.json.JSONArray
 import org.json.JSONObject
 import ru.misis.devicemanager.qr.DeviceQrCodec
 import ru.misis.devicemanager.qr.QrException
-import java.io.DataInputStream
-import java.io.DataOutputStream
-import java.io.InputStream
-import java.io.OutputStream
 import java.security.MessageDigest
 
 class DeviceTransferException(message: String, cause: Throwable? = null) : Exception(message, cause)
 
-data class TransferReply(val accepted: Boolean, val added: Int = 0, val duplicates: Int = 0)
-
-/** Length-framed, versioned snapshots for a single secure Bluetooth RFCOMM session. */
+/** Versioned, integrity-checked portable snapshots for Android's system share flow. */
 object DeviceTransferCodec {
     const val MAX_RECORDS = 250
+    const val MAX_PACKET_BYTES = 8 * 1024 * 1024
     private const val TYPE = "dm.devices"
     private const val VERSION = 1
-    private const val MAX_PACKET_BYTES = 8 * 1024 * 1024
-
-    fun write(output: OutputStream, devices: List<Device>) {
-        val packet = encode(devices)
-        DataOutputStream(output).apply {
-            writeInt(packet.size)
-            write(packet)
-            flush()
-        }
-    }
-
-    fun read(input: InputStream): List<Device> {
-        val stream = DataInputStream(input)
-        val size = try { stream.readInt() }
-        catch (error: Exception) { throw DeviceTransferException("Не удалось прочитать начало передачи", error) }
-        if (size !in 1..MAX_PACKET_BYTES) throw DeviceTransferException("Размер передачи выходит за допустимые пределы")
-        val bytes = ByteArray(size)
-        try { stream.readFully(bytes) }
-        catch (error: Exception) { throw DeviceTransferException("Передача прервалась до получения всех данных", error) }
-        return decode(bytes)
-    }
-
-    fun writeReply(output: OutputStream, reply: TransferReply) {
-        DataOutputStream(output).apply {
-            writeUTF(JSONObject().put("accepted", reply.accepted).put("added", reply.added)
-                .put("duplicates", reply.duplicates).toString())
-            flush()
-        }
-    }
-
-    fun readReply(input: InputStream): TransferReply = try {
-        val json = JSONObject(DataInputStream(input).readUTF())
-        val added = json.getInt("added")
-        val duplicates = json.getInt("duplicates")
-        if (added < 0 || duplicates < 0 || added + duplicates > MAX_RECORDS) throw DeviceTransferException("Некорректный ответ получателя")
-        TransferReply(json.getBoolean("accepted"), added, duplicates)
-    } catch (error: DeviceTransferException) { throw error }
-    catch (error: Exception) { throw DeviceTransferException("Не удалось получить ответ принимающего устройства", error) }
 
     fun encode(devices: List<Device>): ByteArray {
         if (devices.isEmpty() || devices.size > MAX_RECORDS) throw DeviceTransferException("Можно передать от 1 до $MAX_RECORDS устройств")
