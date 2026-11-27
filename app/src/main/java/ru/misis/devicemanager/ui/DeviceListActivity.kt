@@ -28,8 +28,20 @@ class DeviceListActivity : DeviceActivity() {
     private lateinit var model: DeviceListViewModel
     private lateinit var adapter: DeviceAdapter
     private var filterJob: Job? = null
+    private var transferSelectionActive = false
+    private val selectedForTransfer = linkedSetOf<Long>()
+    private val bluetoothTransfer = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            model.filter = DeviceFilter()
+            resetControls()
+            if (transferSelectionActive) cancelTransferSelection()
+        }
+        model.refresh()
+    }
     private val backFromTrash = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() { toggleTrash(false) }
+        override fun handleOnBackPressed() {
+            if (transferSelectionActive) cancelTransferSelection() else toggleTrash(false)
+        }
     }
     private val export = registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
         val records = model.pendingExport
@@ -52,6 +64,8 @@ class DeviceListActivity : DeviceActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_devices)
         model = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))[DeviceListViewModel::class.java]
+        transferSelectionActive = savedInstanceState?.getBoolean("transferSelection") ?: false
+        selectedForTransfer.addAll(savedInstanceState?.getLongArray("selectedForTransfer")?.toList().orEmpty())
         savedInstanceState?.getBundle("filter")?.let { bundle ->
             model.filter = DeviceFilter(
                 search = bundle.getString("search").orEmpty(),
@@ -66,6 +80,7 @@ class DeviceListActivity : DeviceActivity() {
         adapter = DeviceAdapter(
             open = { if (it.deletedAt == null) edit(it) else showActions(it, findViewById(R.id.deviceMenu)) },
             menu = ::showActions,
+            selectionChanged = ::updateTransferSelection,
         )
         findViewById<RecyclerView>(R.id.deviceList).apply {
             layoutManager = LinearLayoutManager(this@DeviceListActivity)
@@ -97,6 +112,8 @@ class DeviceListActivity : DeviceActivity() {
             }
         }
         findViewById<View>(R.id.addDevice).setOnClickListener { edit(null) }
+        findViewById<View>(R.id.deviceCancelTransfer).setOnClickListener { cancelTransferSelection() }
+        findViewById<View>(R.id.transferContinue).setOnClickListener { continueBluetoothTransfer() }
         findViewById<View>(R.id.scanDevice).setOnClickListener {
             startActivity(Intent(this, QrActivity::class.java).putExtra(QrActivity.EXTRA_SCAN, true))
         }
@@ -115,6 +132,8 @@ class DeviceListActivity : DeviceActivity() {
     override fun onResume() { super.onResume(); model.refresh() }
 
     override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean("transferSelection", transferSelectionActive)
+        outState.putLongArray("selectedForTransfer", selectedForTransfer.toLongArray())
         outState.putBundle("filter", Bundle().apply {
             val filter = model.filter
             putString("search", filter.search); putString("status", filter.status?.name)
@@ -129,9 +148,29 @@ class DeviceListActivity : DeviceActivity() {
         if (!::adapter.isInitialized) return
         val state = model.state.value ?: return
         val filter = model.filter
-        backFromTrash.isEnabled = filter.trash
-        findViewById<TextView>(R.id.deviceTitle).setText(if (filter.trash) R.string.trash_title else R.string.section_device)
-        findViewById<View>(R.id.addDevice).isVisible = !filter.trash
+        backFromTrash.isEnabled = filter.trash || transferSelectionActive
+        findViewById<TextView>(R.id.deviceTitle).setText(when {
+            transferSelectionActive -> R.string.select_devices_title
+            filter.trash -> R.string.trash_title
+            else -> R.string.section_device
+        })
+        findViewById<View>(R.id.deviceMenu).isVisible = !transferSelectionActive
+        findViewById<View>(R.id.deviceCancelTransfer).isVisible = transferSelectionActive
+        findViewById<View>(R.id.addDevice).isVisible = !filter.trash && !transferSelectionActive
+        findViewById<View>(R.id.scanDevice).isVisible = !filter.trash && !transferSelectionActive
+        adapter.setSelectionState(transferSelectionActive, selectedForTransfer)
+        findViewById<TextView>(R.id.deviceStats).text = when {
+            transferSelectionActive && selectedForTransfer.isEmpty() -> getString(R.string.select_devices_help)
+            transferSelectionActive -> getString(R.string.selected_devices_count, selectedForTransfer.size)
+            filter.trash -> getString(R.string.trash_stats, state.devices.count { it.deletedAt != null })
+            else -> getString(R.string.inventory_stats, state.devices.count { it.deletedAt == null },
+                state.devices.count { it.deletedAt == null && it.status == DeviceStatus.ACTIVE },
+                state.devices.count { it.deletedAt == null && it.status == DeviceStatus.WRITE_OFF })
+        }
+        findViewById<View>(R.id.transferContinue).apply {
+            isVisible = transferSelectionActive && selectedForTransfer.isNotEmpty()
+            if (isVisible) (this as android.widget.Button).text = getString(R.string.continue_transfer_count, selectedForTransfer.size)
+        }
         findViewById<View>(R.id.deviceLoading).isVisible = state.loading
         val scope = state.devices.filter { (it.deletedAt != null) == filter.trash }
         findViewById<TextView>(R.id.deviceStats).text = if (filter.trash) getString(R.string.trash_stats, scope.size)
@@ -221,6 +260,7 @@ class DeviceListActivity : DeviceActivity() {
             menu.add(0, 3, 2, R.string.theme_title)
             menu.add(0, 4, 3, R.string.about_action)
             menu.add(0, 5, 4, R.string.qr_hub)
+            if (!model.filter.trash) menu.add(0, 6, 5, R.string.transfer_menu)
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     1 -> toggleTrash(!model.filter.trash)
@@ -239,11 +279,62 @@ class DeviceListActivity : DeviceActivity() {
                     4 -> MaterialAlertDialogBuilder(this@DeviceListActivity).setTitle(R.string.about_title)
                         .setMessage(R.string.about_body).setPositiveButton(R.string.ok, null).show()
                     5 -> startActivity(Intent(this@DeviceListActivity, QrActivity::class.java))
+                    6 -> showTransferOptions()
                 }
                 true
             }
             show()
         }
+    }
+
+    private fun showTransferOptions() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.transfer_title)
+            .setItems(arrayOf(getString(R.string.send_data), getString(R.string.receive_data))) { _, choice ->
+                if (choice == 0) beginSendSelection() else beginReceiveTransfer()
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun beginSendSelection() {
+        if (model.filter.trash) return
+        if (adapter.currentList.none { it.deletedAt == null }) {
+            notice(R.string.export_empty)
+            return
+        }
+        selectedForTransfer.clear()
+        transferSelectionActive = true
+        render()
+    }
+
+    private fun updateTransferSelection(device: Device, selected: Boolean) {
+        if (!transferSelectionActive || device.deletedAt != null) return
+        if (selected && selectedForTransfer.size >= DeviceTransferCodec.MAX_RECORDS) {
+            Snackbar.make(findViewById(R.id.deviceRoot), getString(R.string.transfer_too_many, DeviceTransferCodec.MAX_RECORDS), Snackbar.LENGTH_LONG).show()
+            return
+        }
+        if (selected) selectedForTransfer.add(device.id) else selectedForTransfer.remove(device.id)
+        render()
+    }
+
+    private fun continueBluetoothTransfer() {
+        if (selectedForTransfer.isEmpty()) return
+        val intent = Intent(this, BluetoothTransferActivity::class.java)
+            .putExtra(BluetoothTransferActivity.EXTRA_MODE, BluetoothTransferActivity.MODE_SEND)
+            .putExtra(BluetoothTransferActivity.EXTRA_DEVICE_IDS, selectedForTransfer.toLongArray())
+        bluetoothTransfer.launch(intent)
+    }
+
+    private fun beginReceiveTransfer() {
+        bluetoothTransfer.launch(Intent(this, BluetoothTransferActivity::class.java)
+            .putExtra(BluetoothTransferActivity.EXTRA_MODE, BluetoothTransferActivity.MODE_RECEIVE))
+    }
+
+    private fun cancelTransferSelection() {
+        transferSelectionActive = false
+        selectedForTransfer.clear()
+        render()
     }
 
     private fun toggleTrash(trash: Boolean) {

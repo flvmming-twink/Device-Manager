@@ -14,6 +14,8 @@ sealed class SaveResult {
     object Missing : SaveResult()
 }
 
+data class BatchImportResult(val added: Int, val duplicates: Int)
+
 /** SQLite is the single source of truth; contacts are never imported as equipment. */
 class DeviceRepository(context: Context, name: String = "device_manager.db") :
     SQLiteOpenHelper(context.applicationContext, name, null, 1) {
@@ -88,6 +90,27 @@ class DeviceRepository(context: Context, name: String = "device_manager.db") :
     @Synchronized fun deletePermanently(id: Long): Boolean = writableDatabase.delete(
         "devices", "_id=? AND deleted_at IS NOT NULL", arrayOf(id.toString()),
     ) == 1
+
+    /** Adds portable snapshots without replacing local records or restoring trashed ones. */
+    @Synchronized fun importNew(rawDevices: List<Device>): BatchImportResult {
+        require(rawDevices.isNotEmpty() && rawDevices.size <= 250) { "Invalid transfer batch size" }
+        val devices = rawDevices.map { it.normalized() }
+        require(devices.all { it.invalidFields().isEmpty() }) { "Invalid transfer record" }
+        val db = writableDatabase
+        val timestamp = System.currentTimeMillis()
+        var added = 0
+        var duplicates = 0
+        db.beginTransaction()
+        try {
+            devices.forEach { device ->
+                val imported = device.copy(id = 0, createdAt = timestamp, updatedAt = timestamp, deletedAt = null)
+                val id = db.insertWithOnConflict("devices", null, imported.values(), SQLiteDatabase.CONFLICT_IGNORE)
+                if (id == -1L) duplicates++ else added++
+            }
+            db.setTransactionSuccessful()
+            return BatchImportResult(added, duplicates)
+        } finally { db.endTransaction() }
+    }
 
     private fun Device.values() = ContentValues().apply {
         put("name", name); put("inventory_number", inventoryNumber); put("inventory_key", normalizedKey(inventoryNumber))

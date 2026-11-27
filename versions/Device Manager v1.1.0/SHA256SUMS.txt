@@ -1,0 +1,1 @@
+2dd60fae4e10621b50d1d2d087d8145cdcd86611260603e0fa266cbf34a66e5b  DeviceManager-v1.1.0-debug.apk
