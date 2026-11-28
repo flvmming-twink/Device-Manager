@@ -12,7 +12,12 @@ object DeviceCsv {
             devices.forEach { device ->
                 writer.write(row(listOf(device.name, device.inventoryNumber, device.serialNumber,
                     device.category, device.organization, device.building, device.room, device.responsible,
-                    if (device.status == DeviceStatus.ACTIVE) "Действующее" else "На списание",
+                    when (device.status) {
+                        DeviceStatus.ACTIVE -> "Действующее"
+                        DeviceStatus.NEEDS_REPAIR -> "На ремонт"
+                        DeviceStatus.BROKEN -> "Сломан"
+                        DeviceStatus.WRITE_OFF -> "На списание"
+                    },
                     device.writeOffReason, device.notes)))
             }
         }

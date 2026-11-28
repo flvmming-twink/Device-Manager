@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DeviceManager">
         <activity android:name=".ui.DeviceEditorActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.DeviceDetailsActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.DeviceHistoryActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.InventoryAuditActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.DeviceTransferActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <provider
             android:name="androidx.core.content.FileProvider"

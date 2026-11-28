@@ -172,7 +172,7 @@ class QrActivity : DeviceActivity() {
         listOf("Инвентарный номер" to d.inventoryNumber, "Серийный номер" to d.serialNumber,
             "Тип" to d.category, "Организация" to d.organization, "Корпус" to d.building,
             "Кабинет / аудитория" to d.room, "Ответственный" to d.responsible,
-            "Статус" to if (d.status == DeviceStatus.ACTIVE) "Действующее" else "На списание",
+            "Статус" to statusLabel(d.status),
             "Причина списания" to d.writeOffReason, "Заметки" to d.notes).filter { it.second.isNotBlank() }
             .forEach { (label, value) -> detail(label, value) }
         val existing = state.existing
@@ -184,7 +184,7 @@ class QrActivity : DeviceActivity() {
             }
             else -> {
                 section("Уже есть в реестре")
-                paragraph(existing.name + "\nТекущее место: " + existing.location + "\n" + if (existing.status == DeviceStatus.ACTIVE) "Действующее" else "На списание")
+                paragraph(existing.name + "\nТекущее место: " + existing.location + "\n" + statusLabel(existing.status))
                 button("Открыть текущую карточку", true) {
                     startActivity(Intent(this, DeviceEditorActivity::class.java).putExtra(DeviceEditorActivity.EXTRA_ID, existing.id))
                 }

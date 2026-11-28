@@ -4,6 +4,10 @@
     <color name="device_secondary">#526072</color>
     <color name="device_active">#16643E</color>
     <color name="device_active_bg">#E2F2E8</color>
+    <color name="device_repair">#8A5900</color>
+    <color name="device_repair_bg">#FFF1D2</color>
+    <color name="device_broken">#A32929</color>
+    <color name="device_broken_bg">#FCE8E6</color>
     <color name="device_write_off">#884600</color>
     <color name="device_write_off_bg">#FFF0D9</color>
     <color name="device_bar">#1246D5</color>

@@ -35,7 +35,7 @@ class DeviceEditorActivity : DeviceActivity() {
         setContentView(R.layout.activity_device_editor)
         model = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))[DeviceEditorViewModel::class.java]
         findViewById<Spinner>(R.id.editStatus).apply {
-            setup(listOf(getString(R.string.status_active), getString(R.string.status_write_off)))
+            setup(DeviceStatus.entries.map(::statusLabel))
             onItemSelectedListener = Selection { updateStatus() }
         }
         savedInstanceState?.getBundle("draft")?.let { draft ->

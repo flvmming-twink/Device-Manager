@@ -3,7 +3,7 @@ package ru.misis.devicemanager.data
 import java.text.Normalizer
 import java.util.Locale
 
-enum class DeviceStatus { ACTIVE, WRITE_OFF }
+enum class DeviceStatus { ACTIVE, NEEDS_REPAIR, BROKEN, WRITE_OFF }
 enum class DeviceSort { UPDATED, NAME, INVENTORY, LOCATION }
 enum class DeviceField { NAME, INVENTORY, ORGANIZATION, ROOM, WRITE_OFF_REASON }
 
@@ -41,6 +41,48 @@ data class Device(
     }
 
     val location: String get() = listOf(building, room).filter(String::isNotBlank).joinToString(" / ")
+}
+
+data class DeviceHistory(
+    val id: Long,
+    val deviceId: Long,
+    val inventoryNumber: String,
+    val deviceName: String,
+    val eventType: String,
+    val fieldName: String,
+    val oldValue: String,
+    val newValue: String,
+    val occurredAt: Long,
+)
+
+data class DeviceLocation(val organization: String, val building: String, val room: String)
+
+data class AuditItem(
+    val id: Long,
+    val deviceId: Long?,
+    val organization: String,
+    val building: String,
+    val room: String,
+    val name: String,
+    val inventoryNumber: String,
+    val status: DeviceStatus,
+    val expected: Boolean,
+    val foundAt: Long?,
+)
+
+data class RoomAudit(
+    val id: Long,
+    val organization: String,
+    val building: String,
+    val room: String,
+    val startedAt: Long,
+    val completedAt: Long?,
+    val items: List<AuditItem>,
+) {
+    val expectedCount get() = items.count { it.expected }
+    val foundCount get() = items.count { it.expected && it.foundAt != null }
+    val missingCount get() = items.count { it.expected && it.foundAt == null }
+    val extraCount get() = items.count { !it.expected && it.foundAt != null }
 }
 
 /** The same Unicode-aware key is used by uniqueness checks, filters and search. */

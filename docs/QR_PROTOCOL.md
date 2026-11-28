@@ -4,7 +4,7 @@
 
 ## Открытый режим
 
-Объект `{"type":"dm.device","v":1,"device":{...}}`. Поля устройства: `name`, `inventory`, `serial`, `category`, `organization`, `building`, `room`, `responsible`, `status` (`ACTIVE` / `WRITE_OFF`), `reason`, `notes`. Передаются все поля, включая заметки и ответственного. Локальные ID, даты SQLite и команды удаления не передаются. Открытый JSON доступен любому сканеру; это не шифрование.
+Объект `{"type":"dm.device","v":1,"device":{...}}`. Поля устройства: `name`, `inventory`, `serial`, `category`, `organization`, `building`, `room`, `responsible`, `status` (`ACTIVE`, `NEEDS_REPAIR`, `BROKEN` или `WRITE_OFF`), `reason`, `notes`. Передаются все поля, включая заметки и ответственного. Локальные ID, даты SQLite и команды удаления не передаются. Открытый JSON доступен любому сканеру; это не шифрование. Статусы `NEEDS_REPAIR` и `BROKEN` появились в Device Manager 1.1.2; более ранние версии их не распознают.
 
 ## Защищённый режим
 

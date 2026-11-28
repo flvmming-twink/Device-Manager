@@ -55,10 +55,15 @@ class DeviceAdapter(
         selector.isVisible = selectionMode && device.deletedAt == null
         selector.isChecked = device.id in selectedIds
         selector.setOnCheckedChangeListener { _, checked -> selectionChanged(device, checked) }
-        val active = device.status == DeviceStatus.ACTIVE
+        val (statusText, statusColor) = when (device.status) {
+            DeviceStatus.ACTIVE -> R.string.status_active to R.color.device_active
+            DeviceStatus.NEEDS_REPAIR -> R.string.status_needs_repair to R.color.device_repair
+            DeviceStatus.BROKEN -> R.string.status_broken to R.color.device_broken
+            DeviceStatus.WRITE_OFF -> R.string.status_write_off to R.color.device_write_off
+        }
         view.findViewById<TextView>(R.id.cardStatus).apply {
-            setText(if (active) R.string.status_active else R.string.status_write_off)
-            setTextColor(ContextCompat.getColor(context, if (active) R.color.device_active else R.color.device_write_off))
+            setText(statusText)
+            setTextColor(ContextCompat.getColor(context, statusColor))
         }
         view.setOnClickListener {
             if (selectionMode && device.deletedAt == null) selectionChanged(device, device.id !in selectedIds)

@@ -14,8 +14,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import ru.misis.devicemanager.DeviceManagerApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -29,6 +33,7 @@ class DeviceListActivity : DeviceActivity() {
     private lateinit var adapter: DeviceAdapter
     private var filterJob: Job? = null
     private var transferSelectionActive = false
+    private var bulkSelectionActive = false
     private val selectedForTransfer = linkedSetOf<Long>()
     private val deviceTransfer = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
@@ -40,7 +45,7 @@ class DeviceListActivity : DeviceActivity() {
     }
     private val backFromTrash = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
-            if (transferSelectionActive) cancelTransferSelection() else toggleTrash(false)
+            if (transferSelectionActive || bulkSelectionActive) cancelTransferSelection() else toggleTrash(false)
         }
     }
     private val export = registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
@@ -65,6 +70,7 @@ class DeviceListActivity : DeviceActivity() {
         setContentView(R.layout.activity_devices)
         model = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application))[DeviceListViewModel::class.java]
         transferSelectionActive = savedInstanceState?.getBoolean("transferSelection") ?: false
+        bulkSelectionActive = savedInstanceState?.getBoolean("bulkSelection") ?: false
         selectedForTransfer.addAll(savedInstanceState?.getLongArray("selectedForTransfer")?.toList().orEmpty())
         savedInstanceState?.getBundle("filter")?.let { bundle ->
             model.filter = DeviceFilter(
@@ -78,7 +84,7 @@ class DeviceListActivity : DeviceActivity() {
             )
         }
         adapter = DeviceAdapter(
-            open = { if (it.deletedAt == null) edit(it) else showActions(it, findViewById(R.id.deviceMenu)) },
+            open = { if (it.deletedAt == null) openDetails(it) else showActions(it, findViewById(R.id.deviceMenu)) },
             menu = ::showActions,
             selectionChanged = ::updateTransferSelection,
         )
@@ -93,12 +99,16 @@ class DeviceListActivity : DeviceActivity() {
         findViewById<ChipGroup>(R.id.statusFilters).apply {
             check(when (model.filter.status) {
                 DeviceStatus.ACTIVE -> R.id.statusActive
+                DeviceStatus.NEEDS_REPAIR -> R.id.statusNeedsRepair
+                DeviceStatus.BROKEN -> R.id.statusBroken
                 DeviceStatus.WRITE_OFF -> R.id.statusWriteOff
                 null -> R.id.statusAll
             })
             setOnCheckedStateChangeListener { _, ids ->
                 model.filter = model.filter.copy(status = when (ids.firstOrNull()) {
                     R.id.statusActive -> DeviceStatus.ACTIVE
+                    R.id.statusNeedsRepair -> DeviceStatus.NEEDS_REPAIR
+                    R.id.statusBroken -> DeviceStatus.BROKEN
                     R.id.statusWriteOff -> DeviceStatus.WRITE_OFF
                     else -> null
                 })
@@ -113,7 +123,7 @@ class DeviceListActivity : DeviceActivity() {
         }
         findViewById<View>(R.id.addDevice).setOnClickListener { edit(null) }
         findViewById<View>(R.id.deviceCancelTransfer).setOnClickListener { cancelTransferSelection() }
-        findViewById<View>(R.id.transferContinue).setOnClickListener { continueDeviceTransfer() }
+        findViewById<View>(R.id.transferContinue).setOnClickListener { continueSelection() }
         findViewById<View>(R.id.scanDevice).setOnClickListener {
             startActivity(Intent(this, QrActivity::class.java).putExtra(QrActivity.EXTRA_SCAN, true))
         }
@@ -133,6 +143,7 @@ class DeviceListActivity : DeviceActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBoolean("transferSelection", transferSelectionActive)
+        outState.putBoolean("bulkSelection", bulkSelectionActive)
         outState.putLongArray("selectedForTransfer", selectedForTransfer.toLongArray())
         outState.putBundle("filter", Bundle().apply {
             val filter = model.filter
@@ -148,28 +159,36 @@ class DeviceListActivity : DeviceActivity() {
         if (!::adapter.isInitialized) return
         val state = model.state.value ?: return
         val filter = model.filter
-        backFromTrash.isEnabled = filter.trash || transferSelectionActive
+        val selectionActive = transferSelectionActive || bulkSelectionActive
+        backFromTrash.isEnabled = filter.trash || selectionActive
         findViewById<TextView>(R.id.deviceTitle).setText(when {
+            bulkSelectionActive -> R.string.bulk_title
             transferSelectionActive -> R.string.select_devices_title
             filter.trash -> R.string.trash_title
             else -> R.string.section_device
         })
-        findViewById<View>(R.id.deviceMenu).isVisible = !transferSelectionActive
-        findViewById<View>(R.id.deviceCancelTransfer).isVisible = transferSelectionActive
-        findViewById<View>(R.id.addDevice).isVisible = !filter.trash && !transferSelectionActive
-        findViewById<View>(R.id.scanDevice).isVisible = !filter.trash && !transferSelectionActive
-        adapter.setSelectionState(transferSelectionActive, selectedForTransfer)
+        findViewById<View>(R.id.deviceMenu).isVisible = !selectionActive
+        findViewById<View>(R.id.deviceCancelTransfer).isVisible = selectionActive
+        findViewById<View>(R.id.addDevice).isVisible = !filter.trash && !selectionActive
+        findViewById<View>(R.id.scanDevice).isVisible = !filter.trash && !selectionActive
+        adapter.setSelectionState(selectionActive, selectedForTransfer)
         findViewById<View>(R.id.transferContinue).apply {
-            isVisible = transferSelectionActive && selectedForTransfer.isNotEmpty()
-            if (isVisible) (this as android.widget.Button).text = getString(R.string.continue_transfer_count, selectedForTransfer.size)
+            isVisible = selectionActive && selectedForTransfer.isNotEmpty()
+            if (isVisible) (this as android.widget.Button).text = getString(
+                if (bulkSelectionActive) R.string.bulk_continue_count else R.string.continue_transfer_count,
+                selectedForTransfer.size)
         }
         findViewById<View>(R.id.deviceLoading).isVisible = state.loading
         val scope = state.devices.filter { (it.deletedAt != null) == filter.trash }
         findViewById<TextView>(R.id.deviceStats).text = when {
+            bulkSelectionActive && selectedForTransfer.isEmpty() -> getString(R.string.bulk_select_help)
             transferSelectionActive && selectedForTransfer.isEmpty() -> getString(R.string.select_devices_help)
-            transferSelectionActive -> getString(R.string.selected_devices_count, selectedForTransfer.size)
+            selectionActive -> getString(R.string.selected_devices_count, selectedForTransfer.size)
             filter.trash -> getString(R.string.trash_stats, scope.size)
-            else -> getString(R.string.inventory_stats, scope.size, scope.count { it.status == DeviceStatus.ACTIVE },
+            else -> getString(R.string.inventory_stats, scope.size,
+                scope.count { it.status == DeviceStatus.ACTIVE },
+                scope.count { it.status == DeviceStatus.NEEDS_REPAIR },
+                scope.count { it.status == DeviceStatus.BROKEN },
                 scope.count { it.status == DeviceStatus.WRITE_OFF })
         }
         val filterCount = listOf(filter.organization, filter.building, filter.room, filter.category).count(String::isNotBlank)
@@ -212,11 +231,16 @@ class DeviceListActivity : DeviceActivity() {
         })
     }
 
+    private fun openDetails(device: Device) {
+        startActivity(Intent(this, DeviceDetailsActivity::class.java)
+            .putExtra(DeviceDetailsActivity.EXTRA_ID, device.id))
+    }
+
     private fun showActions(device: Device, anchor: View) {
         PopupMenu(this, anchor).apply {
             if (device.deletedAt == null) {
                 menu.add(0, 1, 0, R.string.edit_action)
-                menu.add(0, 2, 1, if (device.status == DeviceStatus.ACTIVE) R.string.mark_write_off else R.string.mark_active)
+                menu.add(0, 2, 1, if (device.status == DeviceStatus.WRITE_OFF) R.string.mark_active else R.string.mark_write_off)
                 menu.add(0, 3, 2, R.string.delete_device)
                 menu.add(0, 6, 3, R.string.qr_action)
             } else {
@@ -226,7 +250,7 @@ class DeviceListActivity : DeviceActivity() {
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     1 -> edit(device)
-                    2 -> edit(device, if (device.status == DeviceStatus.ACTIVE) DeviceStatus.WRITE_OFF else DeviceStatus.ACTIVE)
+                    2 -> edit(device, if (device.status == DeviceStatus.WRITE_OFF) DeviceStatus.ACTIVE else DeviceStatus.WRITE_OFF)
                     3 -> confirmDelete(device, false)
                     4 -> model.mutate(device.id, "restore")
                     5 -> confirmDelete(device, true)
@@ -257,6 +281,8 @@ class DeviceListActivity : DeviceActivity() {
             menu.add(0, 4, 3, R.string.about_action)
             menu.add(0, 5, 4, R.string.qr_hub)
             if (!model.filter.trash) menu.add(0, 6, 5, R.string.transfer_menu)
+            if (!model.filter.trash) menu.add(0, 7, 6, R.string.audit_menu)
+            if (!model.filter.trash) menu.add(0, 8, 7, R.string.bulk_edit_menu)
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     1 -> toggleTrash(!model.filter.trash)
@@ -276,6 +302,8 @@ class DeviceListActivity : DeviceActivity() {
                         .setMessage(R.string.about_body).setPositiveButton(R.string.ok, null).show()
                     5 -> startActivity(Intent(this@DeviceListActivity, QrActivity::class.java))
                     6 -> showTransferOptions()
+                    7 -> startActivity(Intent(this@DeviceListActivity, InventoryAuditActivity::class.java))
+                    8 -> beginBulkSelection()
                 }
                 true
             }
@@ -301,13 +329,25 @@ class DeviceListActivity : DeviceActivity() {
         }
         selectedForTransfer.clear()
         transferSelectionActive = true
+        bulkSelectionActive = false
+        render()
+    }
+
+    private fun beginBulkSelection() {
+        if (model.filter.trash) return
+        if (adapter.currentList.none { it.deletedAt == null }) { notice(R.string.export_empty); return }
+        selectedForTransfer.clear()
+        transferSelectionActive = false
+        bulkSelectionActive = true
         render()
     }
 
     private fun updateTransferSelection(device: Device, selected: Boolean) {
-        if (!transferSelectionActive || device.deletedAt != null) return
-        if (selected && selectedForTransfer.size >= DeviceTransferCodec.MAX_RECORDS) {
-            Snackbar.make(findViewById(R.id.deviceRoot), getString(R.string.transfer_too_many, DeviceTransferCodec.MAX_RECORDS), Snackbar.LENGTH_LONG).show()
+        if ((!transferSelectionActive && !bulkSelectionActive) || device.deletedAt != null) return
+        val selectionLimit = if (transferSelectionActive) DeviceTransferCodec.MAX_RECORDS else 500
+        if (selected && selectedForTransfer.size >= selectionLimit) {
+            Snackbar.make(findViewById(R.id.deviceRoot), getString(
+                if (transferSelectionActive) R.string.transfer_too_many else R.string.bulk_too_many, selectionLimit), Snackbar.LENGTH_LONG).show()
             return
         }
         if (selected) selectedForTransfer.add(device.id) else selectedForTransfer.remove(device.id)
@@ -322,6 +362,128 @@ class DeviceListActivity : DeviceActivity() {
         deviceTransfer.launch(intent)
     }
 
+    private fun continueSelection() {
+        if (selectedForTransfer.isEmpty()) return
+        if (bulkSelectionActive) showBulkEditDialog() else continueDeviceTransfer()
+    }
+
+    private fun showBulkEditDialog() {
+        val records = selectedForTransfer.mapNotNull { id -> model.state.value?.devices?.firstOrNull { it.id == id } }
+        if (records.isEmpty()) return
+        val content = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(24), dp(8), dp(24), dp(12))
+        }
+        fun common(values: List<String>) = values.distinctBy(::normalizedKey).singleOrNull().orEmpty()
+        fun input(label: Int, value: String): Pair<TextInputLayout, TextInputEditText> {
+            val field = TextInputLayout(this, null, R.style.DeviceInput).apply {
+                hint = getString(label)
+                layoutParams = LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(10) }
+            }
+            val edit = TextInputEditText(field.context).apply {
+                setText(value)
+                inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+                setSingleLine(true)
+                filters = arrayOf(android.text.InputFilter.LengthFilter(200))
+            }
+            field.addView(edit)
+            content.addView(field)
+            return field to edit
+        }
+        val locationToggle = MaterialCheckBox(this).apply {
+            setText(R.string.bulk_change_location)
+            minHeight = dp(48)
+        }
+        content.addView(locationToggle)
+        val (organizationField, organization) = input(R.string.field_organization, common(records.map { it.organization }))
+        val (buildingField, building) = input(R.string.field_building, common(records.map { it.building }))
+        val (roomField, room) = input(R.string.field_room, common(records.map { it.room }))
+        val locationFields = listOf(organizationField, buildingField, roomField)
+        locationFields.forEach { it.isEnabled = false }
+        locationToggle.setOnCheckedChangeListener { _, checked -> locationFields.forEach { it.isEnabled = checked } }
+
+        val responsibleToggle = MaterialCheckBox(this).apply {
+            setText(R.string.bulk_change_responsible)
+            minHeight = dp(48)
+        }
+        content.addView(responsibleToggle)
+        val (responsibleField, responsible) = input(R.string.field_responsible, common(records.map { it.responsible }))
+        responsibleField.isEnabled = false
+        responsibleToggle.setOnCheckedChangeListener { _, checked -> responsibleField.isEnabled = checked }
+
+        val statusLabel = TextView(this).apply {
+            setText(R.string.bulk_change_status)
+            setTextColor(getColorCompat(R.color.device_secondary))
+            setPadding(0, dp(18), 0, dp(4))
+        }
+        content.addView(statusLabel)
+        val statuses: List<DeviceStatus?> = listOf(null) + DeviceStatus.entries
+        val status = Spinner(this).apply {
+            setup(listOf(getString(R.string.bulk_status_unchanged)) + DeviceStatus.entries.map(::statusLabel))
+            layoutParams = LinearLayout.LayoutParams(-1, -2)
+        }
+        content.addView(status)
+        val (reasonField, reason) = input(R.string.bulk_write_off_reason, "")
+        reasonField.isVisible = false
+        status.onItemSelectedListener = Selection { position ->
+            reasonField.isVisible = statuses.getOrNull(position) == DeviceStatus.WRITE_OFF
+        }
+
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.bulk_title)
+            .setView(ScrollView(this).apply { addView(content) })
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.apply_bulk_changes, null)
+            .create()
+        dialog.setOnShowListener {
+            dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val targetStatus = statuses.getOrNull(status.selectedItemPosition)
+                val targetLocation = if (locationToggle.isChecked) DeviceLocation(
+                    organization.text?.toString().orEmpty(), building.text?.toString().orEmpty(), room.text?.toString().orEmpty(),
+                ) else null
+                organizationField.error = null
+                roomField.error = null
+                if (targetLocation != null && targetLocation.organization.isBlank()) {
+                    organizationField.error = getString(R.string.required_error)
+                    return@setOnClickListener
+                }
+                if (targetLocation != null && targetLocation.room.isBlank()) {
+                    roomField.error = getString(R.string.required_error)
+                    return@setOnClickListener
+                }
+                val targetResponsible = if (responsibleToggle.isChecked) responsible.text?.toString().orEmpty() else null
+                if (targetLocation == null && targetStatus == null && targetResponsible == null) {
+                    notice(R.string.bulk_choose_change)
+                    return@setOnClickListener
+                }
+                val reasonText = reason.text?.toString().orEmpty()
+                if (targetStatus == DeviceStatus.WRITE_OFF && reasonText.isBlank()) {
+                    reasonField.error = getString(R.string.required_error)
+                    return@setOnClickListener
+                }
+                val ids = selectedForTransfer.toList()
+                dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE).isEnabled = false
+                lifecycleScope.launch {
+                    try {
+                        val changed = withContext((application as DeviceManagerApplication).databaseDispatcher) {
+                            (application as DeviceManagerApplication).repository.updateMany(ids, targetLocation, targetResponsible, targetStatus, reasonText)
+                        }
+                        cancelTransferSelection()
+                        model.refresh()
+                        val resultText = if (changed == 0) getString(R.string.bulk_no_changes)
+                            else getString(R.string.bulk_updated, changed)
+                        Snackbar.make(findViewById(R.id.deviceRoot), resultText, Snackbar.LENGTH_LONG).show()
+                        dialog.dismiss()
+                    } catch (_: Exception) {
+                        dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)?.isEnabled = true
+                        Snackbar.make(findViewById(R.id.deviceRoot), R.string.bulk_error, Snackbar.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+        dialog.show()
+    }
+
     private fun beginReceiveTransfer() {
         deviceTransfer.launch(Intent(this, DeviceTransferActivity::class.java)
             .putExtra(DeviceTransferActivity.EXTRA_MODE, DeviceTransferActivity.MODE_RECEIVE))
@@ -329,6 +491,7 @@ class DeviceListActivity : DeviceActivity() {
 
     private fun cancelTransferSelection() {
         transferSelectionActive = false
+        bulkSelectionActive = false
         selectedForTransfer.clear()
         render()
     }
