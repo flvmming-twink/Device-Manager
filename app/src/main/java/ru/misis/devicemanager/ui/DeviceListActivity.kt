@@ -43,26 +43,31 @@ class DeviceListActivity : DeviceActivity() {
         }
         model.refresh()
     }
+    private val settings = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode != RESULT_OK) return@registerForActivityResult
+        when (result.data?.getStringExtra(DeviceSettingsActivity.EXTRA_ACTION)) {
+            DeviceSettingsActivity.ACTION_TRASH -> toggleTrash(true)
+            DeviceSettingsActivity.ACTION_INVENTORY -> toggleTrash(false)
+            DeviceSettingsActivity.ACTION_EXPORT_CSV -> exportVisibleCsv()
+            DeviceSettingsActivity.ACTION_EXPORT_XLSX -> exportVisibleXlsx()
+            DeviceSettingsActivity.ACTION_TRANSFER -> showTransferOptions()
+            DeviceSettingsActivity.ACTION_AUDIT -> startActivity(Intent(this, InventoryAuditActivity::class.java))
+            DeviceSettingsActivity.ACTION_BULK -> beginBulkSelection()
+            DeviceSettingsActivity.ACTION_THEME -> showThemeDialog()
+            DeviceSettingsActivity.ACTION_QR -> startActivity(Intent(this, QrActivity::class.java))
+            DeviceSettingsActivity.ACTION_ABOUT -> showAboutDialog()
+        }
+    }
     private val backFromTrash = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             if (transferSelectionActive || bulkSelectionActive) cancelTransferSelection() else toggleTrash(false)
         }
     }
     private val export = registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
-        val records = model.pendingExport
-        model.pendingExport = null
-        if (uri != null) {
-            lifecycleScope.launch {
-                val result = runCatching {
-                    withContext(Dispatchers.IO) {
-                        checkNotNull(records)
-                        val stream = checkNotNull(contentResolver.openOutputStream(uri))
-                        DeviceCsv.write(records, stream)
-                    }
-                }
-                notice(if (result.isSuccess) R.string.export_success else R.string.export_error)
-            }
-        }
+        finishExport(uri, xlsx = false)
+    }
+    private val exportXlsx = registerForActivityResult(ActivityResultContracts.CreateDocument(DeviceXlsx.MIME_TYPE)) { uri ->
+        finishExport(uri, xlsx = true)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -128,7 +133,7 @@ class DeviceListActivity : DeviceActivity() {
             startActivity(Intent(this, QrActivity::class.java).putExtra(QrActivity.EXTRA_SCAN, true))
         }
         findViewById<View>(R.id.locationFilters).setOnClickListener { showFilters() }
-        findViewById<View>(R.id.deviceMenu).setOnClickListener { showMenu(it) }
+        findViewById<View>(R.id.deviceMenu).setOnClickListener { openSettings() }
         findViewById<View>(R.id.deviceRetry).setOnClickListener {
             if (model.state.value!!.failed) model.refresh() else resetFilters()
         }
@@ -273,42 +278,52 @@ class DeviceListActivity : DeviceActivity() {
             }.show()
     }
 
-    private fun showMenu(anchor: View) {
-        PopupMenu(this, anchor).apply {
-            menu.add(0, 1, 0, if (model.filter.trash) R.string.inventory_title else R.string.trash_title)
-            if (!model.filter.trash) menu.add(0, 2, 1, R.string.export_csv)
-            menu.add(0, 3, 2, R.string.theme_title)
-            menu.add(0, 4, 3, R.string.about_action)
-            menu.add(0, 5, 4, R.string.qr_hub)
-            if (!model.filter.trash) menu.add(0, 6, 5, R.string.transfer_menu)
-            if (!model.filter.trash) menu.add(0, 7, 6, R.string.audit_menu)
-            if (!model.filter.trash) menu.add(0, 8, 7, R.string.bulk_edit_menu)
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    1 -> toggleTrash(!model.filter.trash)
-                    2 -> {
-                        if (adapter.currentList.isEmpty()) notice(R.string.export_empty)
-                        else {
-                            model.pendingExport = adapter.currentList.toList()
-                            export.launch("DeviceManager-inventory.csv")
-                        }
-                    }
-                    3 -> MaterialAlertDialogBuilder(this@DeviceListActivity).setTitle(R.string.theme_title)
-                        .setSingleChoiceItems(R.array.device_themes, ThemeManager.getThemeMode(this@DeviceListActivity).ordinal) { dialog, position ->
-                            dialog.dismiss()
-                            ThemeManager.setThemeMode(this@DeviceListActivity, ThemeManager.ThemeMode.entries[position])
-                        }.setNegativeButton(R.string.cancel, null).show()
-                    4 -> MaterialAlertDialogBuilder(this@DeviceListActivity).setTitle(R.string.about_title)
-                        .setMessage(R.string.about_body).setPositiveButton(R.string.ok, null).show()
-                    5 -> startActivity(Intent(this@DeviceListActivity, QrActivity::class.java))
-                    6 -> showTransferOptions()
-                    7 -> startActivity(Intent(this@DeviceListActivity, InventoryAuditActivity::class.java))
-                    8 -> beginBulkSelection()
+    private fun openSettings() {
+        settings.launch(Intent(this, DeviceSettingsActivity::class.java)
+            .putExtra(DeviceSettingsActivity.EXTRA_TRASH, model.filter.trash))
+    }
+
+    private fun exportVisibleCsv() {
+        if (adapter.currentList.isEmpty()) { notice(R.string.export_empty); return }
+        model.pendingExport = adapter.currentList.toList()
+        export.launch("DeviceManager-inventory.csv")
+    }
+
+    private fun exportVisibleXlsx() {
+        if (adapter.currentList.isEmpty()) { notice(R.string.export_empty); return }
+        model.pendingExport = adapter.currentList.toList()
+        exportXlsx.launch("DeviceManager-inventory.xlsx")
+    }
+
+    private fun finishExport(uri: android.net.Uri?, xlsx: Boolean) {
+        val records = model.pendingExport
+        model.pendingExport = null
+        if (uri == null) return
+        lifecycleScope.launch {
+            val result = runCatching {
+                withContext(Dispatchers.IO) {
+                    val stream = checkNotNull(contentResolver.openOutputStream(uri))
+                    if (xlsx) DeviceXlsx.write(checkNotNull(records), stream)
+                    else DeviceCsv.write(checkNotNull(records), stream)
                 }
-                true
             }
-            show()
+            notice(if (result.isSuccess) {
+                if (xlsx) R.string.export_xlsx_success else R.string.export_success
+            } else R.string.export_error)
         }
+    }
+
+    private fun showThemeDialog() {
+        MaterialAlertDialogBuilder(this).setTitle(R.string.theme_title)
+            .setSingleChoiceItems(R.array.device_themes, ThemeManager.getThemeMode(this).ordinal) { dialog, position ->
+                dialog.dismiss()
+                ThemeManager.setThemeMode(this, ThemeManager.ThemeMode.entries[position])
+            }.setNegativeButton(R.string.cancel, null).show()
+    }
+
+    private fun showAboutDialog() {
+        MaterialAlertDialogBuilder(this).setTitle(R.string.about_title)
+            .setMessage(R.string.about_body).setPositiveButton(R.string.ok, null).show()
     }
 
     private fun showTransferOptions() {
