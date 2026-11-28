@@ -49,7 +49,7 @@ QR — снимок карточки; после изменения места �
 
 ## Разработка
 
-Открыть корень проекта в Android Studio. Нужны JDK 17, Android SDK 34 и Build Tools 34.0.0. Путь SDK задаётся в локальном `local.properties` (`sdk.dir=...`) или `ANDROID_HOME`.
+Открыть корень проекта в Android Studio. Нужны JDK 17 и Android SDK 34; Android Gradle Plugin 9.1.1 устанавливает Build Tools 36.0.0. Путь SDK задаётся в локальном `local.properties` (`sdk.dir=...`) или `ANDROID_HOME`.
 
 ```powershell
 .\gradlew.bat :app:testDebugUnitTest :app:lintDebug :app:assembleDebug

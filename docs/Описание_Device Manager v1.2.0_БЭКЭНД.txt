@@ -26,7 +26,7 @@ Gradle применяет Google Services plugin только если файл 
 
 Зависимости и совместимость
 - Firebase Android BoM 35.2.0, Firebase Auth и Cloud Firestore.
-- Android Gradle Plugin 8.7.2, Kotlin Gradle Plugin 2.4.21, Gradle 8.9, JDK 17.
+- Android Gradle Plugin 9.1.1, Kotlin Gradle Plugin 2.4.21, Gradle 9.3.1, JDK 17. AGP 9 uses compatibility switches for the existing Kotlin plugin and Android DSL while preserving the Kotlin 2.4 metadata support required by this build.
 - minSdk 24 (Android 7.0), targetSdk 34.
 - Добавлены INTERNET и ACCESS_NETWORK_STATE; пользовательское разрешение во время выполнения не запрашивается.
 - `versionCode` 8, `versionName` 1.2.0.
