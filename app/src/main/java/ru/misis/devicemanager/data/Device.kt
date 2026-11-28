@@ -1,6 +1,7 @@
 package ru.misis.devicemanager.data
 
 import java.text.Normalizer
+import java.security.MessageDigest
 import java.util.Locale
 
 enum class DeviceStatus { ACTIVE, NEEDS_REPAIR, BROKEN, WRITE_OFF }
@@ -23,6 +24,7 @@ data class Device(
     val createdAt: Long = 0,
     val updatedAt: Long = 0,
     val deletedAt: Long? = null,
+    val cloudId: String? = null,
 ) {
     fun normalized() = copy(
         name = name.trim(), inventoryNumber = inventoryNumber.trim(),
@@ -88,6 +90,11 @@ data class RoomAudit(
 /** The same Unicode-aware key is used by uniqueness checks, filters and search. */
 fun normalizedKey(value: String): String = Normalizer.normalize(value, Normalizer.Form.NFKC)
     .trim().replace(Regex("[\\s\\p{Z}]+"), " ").lowercase(Locale.ROOT)
+
+/** Stable shared identity: organisation + inventory number, independent of the local SQLite row ID. */
+fun cloudDeviceId(device: Device): String = MessageDigest.getInstance("SHA-256")
+    .digest("${normalizedKey(device.organization)}\u0000${normalizedKey(device.inventoryNumber)}".toByteArray(Charsets.UTF_8))
+    .joinToString("") { "%02x".format(it.toInt() and 0xff) }
 
 data class DeviceFilter(
     val search: String = "",

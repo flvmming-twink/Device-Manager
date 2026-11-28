@@ -30,6 +30,15 @@ class DeviceListViewModel(app: Application) : AndroidViewModel(app) {
     var mutating = false
         private set
 
+    private val repositoryObserver: () -> Unit = { refresh() }
+
+    init { repository.addDataObserver(repositoryObserver) }
+
+    override fun onCleared() {
+        repository.removeDataObserver(repositoryObserver)
+        super.onCleared()
+    }
+
     fun refresh() {
         refreshJob?.cancel()
         refreshJob = viewModelScope.launch {

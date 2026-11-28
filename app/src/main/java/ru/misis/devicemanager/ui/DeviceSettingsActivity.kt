@@ -33,6 +33,7 @@ class DeviceSettingsActivity : DeviceActivity() {
             row(rows, R.string.bulk_edit_menu, R.string.settings_bulk_subtitle, ACTION_BULK)
         }
         section(rows, R.string.settings_app_group)
+        row(rows, R.string.settings_cloud_title, R.string.settings_cloud_subtitle, ACTION_CLOUD)
         row(rows, R.string.theme_title, R.string.settings_theme_subtitle, ACTION_THEME)
         row(rows, R.string.qr_hub, R.string.settings_qr_subtitle, ACTION_QR)
         row(rows, R.string.about_action, R.string.settings_about_subtitle, ACTION_ABOUT)
@@ -61,6 +62,10 @@ class DeviceSettingsActivity : DeviceActivity() {
             isClickable = true
             isFocusable = true
             setOnClickListener {
+                if (action == ACTION_CLOUD) {
+                    startActivity(Intent(this@DeviceSettingsActivity, CloudSyncActivity::class.java))
+                    return@setOnClickListener
+                }
                 setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_ACTION, action))
                 finish()
             }
@@ -98,5 +103,6 @@ class DeviceSettingsActivity : DeviceActivity() {
         const val ACTION_THEME = "theme"
         const val ACTION_QR = "qr"
         const val ACTION_ABOUT = "about"
+        const val ACTION_CLOUD = "cloud"
     }
 }

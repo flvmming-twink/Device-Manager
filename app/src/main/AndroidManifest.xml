@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <application
@@ -13,6 +15,7 @@
         <activity android:name=".ui.DeviceDetailsActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.DeviceHistoryActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.DeviceSettingsActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.CloudSyncActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.InventoryAuditActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.DeviceTransferActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <provider
